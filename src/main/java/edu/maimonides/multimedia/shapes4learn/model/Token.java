@@ -13,7 +13,7 @@ public class Token {
 	String tipoToken;
 	String lexema;
 	Boolean validez;
-	// agregar atributo valides!!!
+	// agregar atributo validez!!!
 	
 	public String getTipoToken() {
 		return tipoToken;
@@ -26,6 +26,13 @@ public class Token {
 	}
 	public void setLexema(String lexema) {
 		this.lexema = lexema;
+	}
+	
+	public Boolean getValidez() {
+		return validez;
+	}
+	public void setValidez(Boolean validez) {
+		this.validez = validez;
 	}
 	
 	/*String create;

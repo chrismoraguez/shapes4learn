@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
+
 import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
 import edu.maimonides.multimedia.shapes4learn.interpreter.Interpreter;
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
@@ -26,8 +28,47 @@ public class LexicalAnalyzer implements Interpreter {
 		
 		Token token = new Token();
 		
+        //Defino lexemas para cada token.
 		
+		String create = "\\b(create)\\b";
+        Pattern PatronCreate = Pattern.compile(create);
 		
+		String forma = "\\b(?:shape|rectangle|circle)\\b";
+        Pattern PatronForma = Pattern.compile(forma);
+
+        String id = "^[a-zA-Z]+$";
+        Pattern PatronId = Pattern.compile(id);
+        
+        String puntoComa = "^[,]$";
+        Pattern PatronComa = Pattern.compile(puntoComa);
+               
+        
+ /*     
+ 		String setPosition = "\\b(setposition)\\b"; 
+        Pattern PatronSetPosition = Pattern.compile(setPosition);
+ 
+   		String setColor = "\\b(setcolor)\\b";
+        Pattern PatronSetColor = Pattern.compile(setColor);
+        
+        String setBase = "\\b(setbase)\\b";
+        Pattern PatronSetBase = Pattern.compile(setBase);
+        
+        String setHeight = "\\b(setheight)\\b";
+        Pattern PatronSetHeight = Pattern.compile(setHeight);
+        
+        String setRadius = "\\b(setradius)\\b";
+        Pattern PatronSetRadius = Pattern.compile(setRadius);
+        
+        String colorDef = "#[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]";
+        Pattern PatronColor = Pattern.compile(colorDef);
+        
+        String expresionNumerica = "(^[-+]?[0-9]*\\.?[0-9]+$)|(\\()|(\\))|(\\*)|(\\+)|(\\-)|(\\/)";
+        Pattern PatronNumericExpression = Pattern.compile(expresionNumerica);
+*/
+        
+        
+        
+        
 		StringTokenizer stringTokenizer = new StringTokenizer(code);
 		
 		String tokenActual = "";
