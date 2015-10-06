@@ -3,6 +3,7 @@ package edu.maimonides.multimedia.shapes4learn.interpreter;
 import java.io.IOException;
 import java.io.InputStream;
 
+import edu.maimonides.multimedia.shapes4learn.analysis.LexicalException;
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
 
 /**
@@ -22,8 +23,9 @@ public interface Interpreter {
 	 *            A {@link String} representing the entire source code.
 	 * @param ambient
 	 *            The {@link ShapeAmbient} where the code will be interpreted.
+	 * @throws LexicalException 
 	 */
-	public void interpret(String code, ShapeAmbient ambient) throws CodeException;
+	public void interpret(String code, ShapeAmbient ambient) throws CodeException, LexicalException;
 
 	/**
 	 * Interprets a source as a stream. Characters are read on demand and
@@ -36,6 +38,7 @@ public interface Interpreter {
 	 *            The {@link ShapeAmbient} where the code will be interpreted.
 	 * @throws IOException
 	 *             If there is an issue accessing the stream.
+	 * @throws LexicalException 
 	 */
-	public void interpret(InputStream stream, ShapeAmbient ambient) throws CodeException, IOException;
+	public void interpret(InputStream stream, ShapeAmbient ambient) throws CodeException, IOException, LexicalException;
 }
