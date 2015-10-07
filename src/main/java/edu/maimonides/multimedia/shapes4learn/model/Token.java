@@ -9,76 +9,32 @@ package edu.maimonides.multimedia.shapes4learn.model;
  * 
  */
 public class Token {
-	
+
 	String tipoToken;
 	String lexema;
-	Boolean validez;
-	// agregar atributo validez!!!
-	
+	boolean validez;
+
 	public String getTipoToken() {
 		return tipoToken;
 	}
+
 	public void setTipoToken(String tipoToken) {
 		this.tipoToken = tipoToken;
 	}
+
 	public String getLexema() {
 		return lexema;
 	}
+
 	public void setLexema(String lexema) {
 		this.lexema = lexema;
 	}
-	
+
 	public Boolean getValidez() {
 		return validez;
 	}
+
 	public void setValidez(Boolean validez) {
 		this.validez = validez;
 	}
-	
-	/*String create;
-	String forma;
-	String id;
-	String puntoComa;
-	String setcolor;
-	String colorDefinition;
-	
-	public String getCreate() {
-		return create;
-	}
-	public void setCreate(String create) {
-		this.create = create;
-	}
-	public String getForma() {
-		return forma;
-	}
-	public void setForma(String forma) {
-		this.forma = forma;
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public String getPuntoComa() {
-		return puntoComa;
-	}
-	public void setPuntoComa(String puntoComa) {
-		this.puntoComa = puntoComa;
-	}
-	public String getSetcolor() {
-		return setcolor;
-	}
-	public void setSetcolor(String setcolor) {
-		this.setcolor = setcolor;
-	}
-	public String getColorDefinition() {
-		return colorDefinition;
-	}
-	public void setColorDefinition(String colorDefinition) {
-		this.colorDefinition = colorDefinition;
-	}
-*/	
-	
-	
 }

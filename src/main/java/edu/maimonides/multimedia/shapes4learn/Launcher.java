@@ -1,17 +1,17 @@
 package edu.maimonides.multimedia.shapes4learn;
 
-import javax.swing.JOptionPane;
+import edu.maimonides.multimedia.shapes4learn.analysis.LexicalAnalyzer;
+import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
 
-import edu.maimonides.multimedia.shapes4learn.gui.InterpreterFrame;
-import edu.maimonides.multimedia.shapes4learn.interpreter.Interpreter;
-import edu.maimonides.multimedia.shapes4learn.model.impl.BasicShapeAmbient;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+
+import javax.swing.*;
+import java.awt.Component;
 
 /**
- * 
- */
-
-/**
- * @author matias
+ * @author Matias Giorgio
  * 
  */
 public class Launcher {
@@ -19,33 +19,51 @@ public class Launcher {
 	/**
 	 * @param args
 	 */
+
 	public static void main(String[] args) {
-		String classname = null;
-		if (args.length == 0) {
-			JOptionPane.showMessageDialog(null, "Using Test Interpreter", "Warning", JOptionPane.WARNING_MESSAGE);
-			classname = "edu.maimonides.multimedia.shapes4learn.interpreter.RegexInterpreter";
-		} else {
-			classname = args[0];
-		}
-		InterpreterFrame frame;
-		try {
-			frame = new InterpreterFrame(createInterpreter(classname), new BasicShapeAmbient());
-			frame.init();
-			frame.setVisible(true);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-	}
+		JButton boton;
 
-	private static Interpreter createInterpreter(String classname) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		@SuppressWarnings("unchecked")
-		Class<Interpreter> clazz = (Class<Interpreter>) Class.forName(classname);
+		JFrame frame = new JFrame("Shapes4Learn");
+		JPanel panelPrincipal = new JPanel();
+		final JTextArea areaTexto = new JTextArea("Ingrese Sentencia...");
+		areaTexto.setRows(3);
 
-		return clazz.newInstance();
+		panelPrincipal.add(areaTexto, BorderLayout.NORTH);
+
+		boton = new javax.swing.JButton();
+		boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		boton.setText("Ejecutar Analizador Léxico:");
+		boton.setPreferredSize(new Dimension(200, 50));
+
+		boton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				BotonActionPerformed(evt);
+			}
+
+			private void BotonActionPerformed(ActionEvent evt) {
+				String texto;
+				texto = areaTexto.getText();
+
+				System.out.println(texto);
+
+				LexicalAnalyzer analizadorLexico = new LexicalAnalyzer();
+				try {
+					analizadorLexico.interpret(texto, null);
+				} catch (CodeException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		panelPrincipal.add(boton);
+		panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+
+		frame.getContentPane().add(panelPrincipal);
+		frame.setSize(250, 250);
+		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+		//frame.pack();
+
 	}
 }

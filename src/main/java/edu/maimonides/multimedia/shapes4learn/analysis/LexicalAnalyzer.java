@@ -26,7 +26,7 @@ import edu.maimonides.multimedia.shapes4learn.model.Token;
  */
 public class LexicalAnalyzer implements Interpreter {
 
-	public List<Token> analyze(String code) throws LexicalException {
+	public List<Token> analyze(String code) throws CodeException {
 
 		List<Token> tokens = new LinkedList<>();
 
@@ -75,20 +75,36 @@ public class LexicalAnalyzer implements Interpreter {
 		StringTokenizer stringTokenizer = new StringTokenizer(code);
 
 		String tokenActual = "";
-
+		String tokenFinal = "";
+		
+		
 		boolean huboErrores = false;
-
+		boolean finDeSentencia = false;
+		boolean lexNoValido = false;
+		
 		while (stringTokenizer.hasMoreTokens()) {
 
-			// create circle circulo;
+			
+			
 			tokenActual = stringTokenizer.nextToken();
-
+	
+			
+			if (tokenActual.contains(";")){
+				String[] pfinal = StringUtils.split(tokenActual, ";");
+				
+				finDeSentencia = true;
+				tokenActual = pfinal[0]; 
+				
+				if (pfinal.length>1){
+					tokenFinal = pfinal[1];
+				}	
+			}
+			
 			boolean tokenEncontrado = false;
 			token.setValidez(false);
 
 			Matcher matcherCreate = PatronCreate.matcher(tokenActual);
-
-			if (!tokenEncontrado && matcherCreate.matches()) {
+			if (!tokenEncontrado && matcherCreate.matches() && !lexNoValido) {
 				System.out.println("Token: create - Lexema: " + tokenActual);
 
 				token.setTipoToken("create");
@@ -101,11 +117,11 @@ public class LexicalAnalyzer implements Interpreter {
 			}
 
 			Matcher matcherForma = PatronForma.matcher(tokenActual);
-			if (!tokenEncontrado && matcherForma.matches()) {
+			if (!tokenEncontrado && matcherForma.matches() && !lexNoValido) {
 				System.out.println("Token: forma - Lexema: " + tokenActual);
 
 				token.setTipoToken("forma");
-				token.setLexema(tokenActual);
+				 token.setLexema(tokenActual);
 				token.setValidez(true);
 				tokens.add(token);
 
@@ -114,7 +130,7 @@ public class LexicalAnalyzer implements Interpreter {
 			}
 
 			Matcher matcherId = PatronId.matcher(tokenActual);
-			if (!tokenEncontrado && matcherId.matches()) {
+			if (!tokenEncontrado && matcherId.matches() && !lexNoValido) {
 				System.out.println("Token: id - Lexema: " + tokenActual);
 
 				token.setTipoToken("id");
@@ -127,24 +143,37 @@ public class LexicalAnalyzer implements Interpreter {
 			}
 
 			Matcher matcherPuntoComa = PatronPuntoComa.matcher(tokenActual);
-			if (!tokenEncontrado && matcherPuntoComa.matches()) {
-				System.out.println("Token: Fin de sentencia - Lexema: "
-						+ tokenActual);
+			if ((!tokenEncontrado && matcherPuntoComa.matches() || finDeSentencia)) {
+				
+				System.out.println("Token: Fin de sentencia - Lexema: ;");
 
 				token.setTipoToken("Fin de sentencia");
 				token.setLexema(tokenActual);
 				token.setValidez(true);
 				tokens.add(token);
-
+				
 				tokenEncontrado = true;
 
 			}
-
-			if (tokenEncontrado) {
+			
+			if (finDeSentencia){
+				lexNoValido = true;
+			}
+			
+			if (!tokenEncontrado ) {
+				
 				System.out
 						.println("'" + tokenActual + "': lexema desconocido.");
 				huboErrores = true;
 			}
+			
+			if (!tokenFinal.equalsIgnoreCase("")) {
+				
+				System.out
+						.println("'" + tokenFinal + "': lexema desconocido.");
+				
+			} 
+			
 		}
 
 		if (huboErrores) {
@@ -156,22 +185,18 @@ public class LexicalAnalyzer implements Interpreter {
 
 	@Override
 	public void interpret(String code, ShapeAmbient ambient)
-			throws CodeException, LexicalException {
+			throws CodeException {
 		String[] lines = StringUtils.split(code, "\n");
 		List<Token> tokens = new LinkedList<>();
 
 		for (String line : lines) {
 			tokens.addAll(analyze(line));
 		}
-		
-		
-		
-		
 	}
 
 	@Override
 	public void interpret(InputStream stream, ShapeAmbient ambient)
-			throws CodeException, IOException, LexicalException {
+			throws CodeException, IOException {
 		this.interpret(IOUtils.toString(stream), ambient);
 	}
 }
