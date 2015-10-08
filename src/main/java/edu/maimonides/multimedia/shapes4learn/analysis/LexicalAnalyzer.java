@@ -79,11 +79,12 @@ public class LexicalAnalyzer implements Interpreter {
 		
 		
 		boolean huboErrores = false;
-		boolean finDeSentencia = false;
+		
 		boolean lexNoValido = false;
 		
 		while (stringTokenizer.hasMoreTokens()) {
-
+			
+			boolean finDeSentencia = false;
 			
 			
 			tokenActual = stringTokenizer.nextToken();
