@@ -8,6 +8,11 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
  */
 public class SemanticException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public SemanticException() {
 		// TODO Auto-generated constructor stub
 	}

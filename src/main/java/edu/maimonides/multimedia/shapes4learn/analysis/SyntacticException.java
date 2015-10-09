@@ -8,6 +8,11 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
  */
 public class SyntacticException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public SyntacticException() {
 		// TODO Auto-generated constructor stub
 	}

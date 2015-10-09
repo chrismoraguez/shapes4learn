@@ -3,7 +3,6 @@ package edu.maimonides.multimedia.shapes4learn.interpreter;
 import java.io.IOException;
 import java.io.InputStream;
 
-import edu.maimonides.multimedia.shapes4learn.analysis.LexicalException;
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
 
 /**

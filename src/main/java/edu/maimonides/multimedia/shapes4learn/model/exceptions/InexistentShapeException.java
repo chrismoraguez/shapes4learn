@@ -9,6 +9,11 @@ package edu.maimonides.multimedia.shapes4learn.model.exceptions;
  */
 public class InexistentShapeException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public InexistentShapeException() {
 	}
 
