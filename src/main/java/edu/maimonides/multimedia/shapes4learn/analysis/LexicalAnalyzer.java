@@ -2,13 +2,16 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+
 import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
 import edu.maimonides.multimedia.shapes4learn.interpreter.Interpreter;
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
@@ -28,8 +31,6 @@ public class LexicalAnalyzer implements Interpreter {
 	public List<Token> analyze(String code) throws CodeException {
 
 		List<Token> tokens = new LinkedList<>();
-
-		Token token = new Token();
 
 		// Defino lexemas para cada token.
 
@@ -76,11 +77,16 @@ public class LexicalAnalyzer implements Interpreter {
 		String tokenActual = "";
 		String tokenFinal = "";
 
+		// prueba
+		String tokenPuntoComa = "";
+
 		boolean huboErrores = false;
 
 		boolean lexNoValido = false;
 
 		while (stringTokenizer.hasMoreTokens()) {
+
+			Token token = new Token();
 
 			boolean finDeSentencia = false;
 
@@ -91,7 +97,7 @@ public class LexicalAnalyzer implements Interpreter {
 
 				finDeSentencia = true;
 				tokenActual = pfinal[0];
-
+				tokenPuntoComa = ";";
 				if (pfinal.length > 1) {
 					tokenFinal = pfinal[1];
 				}
@@ -104,6 +110,7 @@ public class LexicalAnalyzer implements Interpreter {
 			if (!tokenEncontrado && matcherCreate.matches() && !lexNoValido) {
 				System.out.println("Token: Create - Lexema: " + tokenActual);
 
+				token = new Token();
 				token.setTipoToken("create");
 				token.setLexema(tokenActual);
 				token.setValidez(true);
@@ -116,7 +123,7 @@ public class LexicalAnalyzer implements Interpreter {
 			Matcher matcherForma = PatronForma.matcher(tokenActual);
 			if (!tokenEncontrado && matcherForma.matches() && !lexNoValido) {
 				System.out.println("Token: Forma - Lexema: " + tokenActual);
-
+				token = new Token();
 				token.setTipoToken("forma");
 				token.setLexema(tokenActual);
 				token.setValidez(true);
@@ -129,22 +136,8 @@ public class LexicalAnalyzer implements Interpreter {
 			Matcher matcherId = PatronId.matcher(tokenActual);
 			if (!tokenEncontrado && matcherId.matches() && !lexNoValido) {
 				System.out.println("Token: ID - Lexema: " + tokenActual);
-
+				token = new Token();
 				token.setTipoToken("id");
-				token.setLexema(tokenActual);
-				token.setValidez(true);
-				tokens.add(token);
-
-				tokenEncontrado = true;
-
-			}
-
-			Matcher matcherPuntoComa = PatronPuntoComa.matcher(tokenActual);
-			if ((!tokenEncontrado && matcherPuntoComa.matches() || finDeSentencia)) {
-
-				System.out.println("Token: Fin de Sentencia - Lexema: ;");
-
-				token.setTipoToken("Fin de sentencia");
 				token.setLexema(tokenActual);
 				token.setValidez(true);
 				tokens.add(token);
@@ -161,19 +154,50 @@ public class LexicalAnalyzer implements Interpreter {
 
 				System.out
 						.println("'" + tokenActual + "': lexema desconocido.");
+				token = new Token();
+				token.setLexema(tokenActual);
+				token.setTipoToken("Lexema Desconocido");
+				token.setValidez(false);
+				tokens.add(token);
 				huboErrores = true;
 			}
 
 			if (!tokenFinal.equalsIgnoreCase("")) {
 
 				System.out.println("'" + tokenFinal + "': lexema desconocido.");
+				token = new Token();
+				token.setLexema(tokenFinal);
+				token.setTipoToken("Lexema Desconocido");
+				token.setValidez(false);
+				tokens.add(token);
 				huboErrores = true;
+			}
+
+			Matcher matcherPuntoComa = PatronPuntoComa.matcher(tokenPuntoComa);
+			if (matcherPuntoComa.matches()) {
+
+				System.out.println("Token: Fin de Sentencia - Lexema: ;");
+
+				token = new Token();
+				token.setTipoToken("Fin de sentencia");
+				token.setLexema(tokenPuntoComa);
+				token.setValidez(true);
+				tokens.add(token);
+
+				// tokenEncontrado = true;
+
 			}
 
 		}
 
 		if (huboErrores) {
 			System.out.println("El analizador léxico ha encontrado errores.");
+		}
+
+		Iterator<Token> iterator = tokens.iterator();
+
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next().getTipoToken());
 		}
 
 		return tokens;

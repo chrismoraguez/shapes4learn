@@ -2,6 +2,7 @@ package edu.maimonides.multimedia.shapes4learn.lexicalanalyzer;
 
 import static org.junit.Assert.*;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class LexicalAnalyzerTest {
 		try {
 			tokens.addAll(analizadorLexico.analyze("create circle circulo;"));
 			for (Token token : tokens) {
-				if (!token.getValidez()){
+				if (!token.getValidez()) {
 					fail("Test Failed! - Incorrect Token");
 				}
 			}
@@ -49,17 +50,22 @@ public class LexicalAnalyzerTest {
 			// e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testIncorrectSentences() {
 
 		List<Token> tokens = new LinkedList<>();
 		try {
 			tokens.addAll(analizadorLexico.analyze("create circ4le circulo;"));
-			for (Token token : tokens) {
-				System.out.println(token.getTipoToken() + token.getLexema() + token.getValidez());
-				if (token.getValidez()){
-					System.out.println("Paso: " + token.getTipoToken());
+			Iterator<Token> iterator = tokens.iterator();
+
+			while (iterator.hasNext()) {
+				System.out.println(iterator.next().getTipoToken()
+						+ iterator.next().getLexema()
+						+ iterator.next().getValidez());
+				if (iterator.next().getValidez()) {
+					System.out.println("Paso: "
+							+ iterator.next().getTipoToken());
 					fail("Test Failed! - Incorrect Token");
 				}
 			}
@@ -69,5 +75,4 @@ public class LexicalAnalyzerTest {
 		}
 	}
 
-	
 }
