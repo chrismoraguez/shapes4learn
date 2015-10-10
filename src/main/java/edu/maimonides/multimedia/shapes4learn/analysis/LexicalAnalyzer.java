@@ -75,31 +75,28 @@ public class LexicalAnalyzer implements Interpreter {
 
 		String tokenActual = "";
 		String tokenFinal = "";
-		
-		
+
 		boolean huboErrores = false;
-		
+
 		boolean lexNoValido = false;
-		
+
 		while (stringTokenizer.hasMoreTokens()) {
-			
+
 			boolean finDeSentencia = false;
-			
-			
+
 			tokenActual = stringTokenizer.nextToken();
-	
-			
-			if (tokenActual.contains(";")){
+
+			if (tokenActual.contains(";")) {
 				String[] pfinal = StringUtils.split(tokenActual, ";");
-				
+
 				finDeSentencia = true;
-				tokenActual = pfinal[0]; 
-				
-				if (pfinal.length>1){
+				tokenActual = pfinal[0];
+
+				if (pfinal.length > 1) {
 					tokenFinal = pfinal[1];
-				}	
+				}
 			}
-			
+
 			boolean tokenEncontrado = false;
 			token.setValidez(false);
 
@@ -121,7 +118,7 @@ public class LexicalAnalyzer implements Interpreter {
 				System.out.println("Token: Forma - Lexema: " + tokenActual);
 
 				token.setTipoToken("forma");
-				 token.setLexema(tokenActual);
+				token.setLexema(tokenActual);
 				token.setValidez(true);
 				tokens.add(token);
 
@@ -144,36 +141,35 @@ public class LexicalAnalyzer implements Interpreter {
 
 			Matcher matcherPuntoComa = PatronPuntoComa.matcher(tokenActual);
 			if ((!tokenEncontrado && matcherPuntoComa.matches() || finDeSentencia)) {
-				
+
 				System.out.println("Token: Fin de Sentencia - Lexema: ;");
 
 				token.setTipoToken("Fin de sentencia");
 				token.setLexema(tokenActual);
 				token.setValidez(true);
 				tokens.add(token);
-				
+
 				tokenEncontrado = true;
 
 			}
-			
-			if (finDeSentencia){
+
+			if (finDeSentencia) {
 				lexNoValido = true;
 			}
-			
-			if (!tokenEncontrado ) {
-				
+
+			if (!tokenEncontrado) {
+
 				System.out
 						.println("'" + tokenActual + "': lexema desconocido.");
 				huboErrores = true;
 			}
-			
+
 			if (!tokenFinal.equalsIgnoreCase("")) {
-				
-				System.out
-						.println("'" + tokenFinal + "': lexema desconocido.");
+
+				System.out.println("'" + tokenFinal + "': lexema desconocido.");
 				huboErrores = true;
-			} 
-			
+			}
+
 		}
 
 		if (huboErrores) {
@@ -190,7 +186,7 @@ public class LexicalAnalyzer implements Interpreter {
 		List<Token> tokens = new LinkedList<>();
 
 		for (String line : lines) {
-			System.out.println("Sentencia a analizar: ' " + line + " '" );
+			System.out.println("Sentencia a analizar: ' " + line + " '");
 			tokens.addAll(analyze(line));
 			System.out.println("-----------------------------------\n");
 		}

@@ -89,7 +89,7 @@ public abstract class InterpreterTests {
 
 		Color color = ColorUtils.color("123456");
 
-		Assert.assertEquals("Retrieved shape has invalid color", color, shape.getColor());
+Assert.assertEquals("Retrieved shape has invalid color", color, shape.getColor());
 	}
 
 	@Test
