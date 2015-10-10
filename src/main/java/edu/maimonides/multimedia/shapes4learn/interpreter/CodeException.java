@@ -9,11 +9,6 @@ package edu.maimonides.multimedia.shapes4learn.interpreter;
  */
 public class CodeException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public CodeException() {
 	}
 

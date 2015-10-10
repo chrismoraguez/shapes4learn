@@ -8,11 +8,6 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
  */
 public class SyntacticException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public SyntacticException() {
 		// TODO Auto-generated constructor stub
 	}
@@ -32,7 +27,8 @@ public class SyntacticException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SyntacticException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public SyntacticException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}

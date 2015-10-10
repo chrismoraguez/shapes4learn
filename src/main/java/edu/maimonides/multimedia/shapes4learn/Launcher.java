@@ -2,18 +2,14 @@ package edu.maimonides.multimedia.shapes4learn;
 
 import edu.maimonides.multimedia.shapes4learn.analysis.LexicalAnalyzer;
 import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-
-
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
 import java.awt.Color;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 /**
- * @author Matias Giorgio
+ * @author Becerra-Gorino-Moraguez-Pernetta
  * 
  */
 public class Launcher {
@@ -35,24 +31,24 @@ public class Launcher {
 		JButton boton;
 
 		JFrame ventana = new JFrame("Shapes4Learn");
-		ventana.setTitle("Analizador");
-		
+		ventana.setTitle("Analizador Léxico");
+
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setBackground(Color.GRAY);
-		
+
 		final JTextArea areaTexto = new JTextArea("Ingrese Sentencia aquí...");
 		areaTexto.setLineWrap(true);
 		areaTexto.setBackground(Color.BLACK);
 		areaTexto.setForeground(Color.WHITE);
 		areaTexto.setFont(new Font("Times New Roman", Font.PLAIN, 19));
-		
+
 		areaTexto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				areaTexto.setText("");
 			}
 		});
-		
+
 		areaTexto.setRows(3);
 
 		panelPrincipal.add(areaTexto, BorderLayout.NORTH);
@@ -85,13 +81,13 @@ public class Launcher {
 		});
 
 		panelPrincipal.add(boton);
-		panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+		panelPrincipal
+				.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
 
 		ventana.getContentPane().add(panelPrincipal);
 		ventana.setSize(360, 260);
 		ventana.setVisible(true);
 		ventana.setLocationRelativeTo(null);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 	}
 }
