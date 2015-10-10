@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 /**
+ * @author Matias Giorgio
  * @author Becerra-Gorino-Moraguez-Pernetta
  * 
  */
@@ -68,8 +69,6 @@ public class Launcher {
 			private void BotonActionPerformed(ActionEvent evt) {
 				String texto;
 				texto = areaTexto.getText();
-
-				System.out.println(texto);
 
 				LexicalAnalyzer analizadorLexico = new LexicalAnalyzer();
 				try {

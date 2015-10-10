@@ -7,10 +7,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-
 import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
 import edu.maimonides.multimedia.shapes4learn.interpreter.Interpreter;
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
@@ -22,6 +20,7 @@ import edu.maimonides.multimedia.shapes4learn.model.Token;
  * operations.
  * 
  * @author Matias Giorgio
+ * @author Becerra-Gorino-Moraguez-Pernetta
  * 
  */
 public class LexicalAnalyzer implements Interpreter {
@@ -106,7 +105,7 @@ public class LexicalAnalyzer implements Interpreter {
 
 			Matcher matcherCreate = PatronCreate.matcher(tokenActual);
 			if (!tokenEncontrado && matcherCreate.matches() && !lexNoValido) {
-				System.out.println("Token: create - Lexema: " + tokenActual);
+				System.out.println("Token: Create - Lexema: " + tokenActual);
 
 				token.setTipoToken("create");
 				token.setLexema(tokenActual);
@@ -119,7 +118,7 @@ public class LexicalAnalyzer implements Interpreter {
 
 			Matcher matcherForma = PatronForma.matcher(tokenActual);
 			if (!tokenEncontrado && matcherForma.matches() && !lexNoValido) {
-				System.out.println("Token: forma - Lexema: " + tokenActual);
+				System.out.println("Token: Forma - Lexema: " + tokenActual);
 
 				token.setTipoToken("forma");
 				 token.setLexema(tokenActual);
@@ -132,7 +131,7 @@ public class LexicalAnalyzer implements Interpreter {
 
 			Matcher matcherId = PatronId.matcher(tokenActual);
 			if (!tokenEncontrado && matcherId.matches() && !lexNoValido) {
-				System.out.println("Token: id - Lexema: " + tokenActual);
+				System.out.println("Token: ID - Lexema: " + tokenActual);
 
 				token.setTipoToken("id");
 				token.setLexema(tokenActual);
@@ -146,7 +145,7 @@ public class LexicalAnalyzer implements Interpreter {
 			Matcher matcherPuntoComa = PatronPuntoComa.matcher(tokenActual);
 			if ((!tokenEncontrado && matcherPuntoComa.matches() || finDeSentencia)) {
 				
-				System.out.println("Token: Fin de sentencia - Lexema: ;");
+				System.out.println("Token: Fin de Sentencia - Lexema: ;");
 
 				token.setTipoToken("Fin de sentencia");
 				token.setLexema(tokenActual);
@@ -172,7 +171,7 @@ public class LexicalAnalyzer implements Interpreter {
 				
 				System.out
 						.println("'" + tokenFinal + "': lexema desconocido.");
-				
+				huboErrores = true;
 			} 
 			
 		}
@@ -191,7 +190,9 @@ public class LexicalAnalyzer implements Interpreter {
 		List<Token> tokens = new LinkedList<>();
 
 		for (String line : lines) {
+			System.out.println("Sentencia a analizar: ' " + line + " '" );
 			tokens.addAll(analyze(line));
+			System.out.println("-----------------------------------\n");
 		}
 	}
 
