@@ -37,40 +37,38 @@ public class LexicalAnalyzer implements Interpreter {
 		String create = "\\b(create)\\b";
 		Pattern PatronCreate = Pattern.compile(create);
 
+		String setColor = "\\b(setcolor)\\b";
+		Pattern PatronSetColor = Pattern.compile(setColor);
+
+		String setBase = "\\b(setbase)\\b";
+		Pattern PatronSetBase = Pattern.compile(setBase);
+
+		String setHeight = "\\b(setheight)\\b";
+		Pattern PatronSetHeight = Pattern.compile(setHeight);
+
+		String setRadius = "\\b(setradius)\\b";
+		Pattern PatronSetRadius = Pattern.compile(setRadius);
+
+		String setPosition = "\\b(setposition)\\b";
+		Pattern PatronSetPosition = Pattern.compile(setPosition);
+
 		String forma = "\\b(?:shape|rectangle|circle)\\b";
 		Pattern PatronForma = Pattern.compile(forma);
+
+		String colorDef = "#[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]";
+		Pattern PatronColor = Pattern.compile(colorDef);
+
+		String expresionNumerica = "(^[-+]?[0-9]*\\.?[0-9]+$)|(\\()|(\\))|(\\*)|(\\+)|(\\-)|(\\/)";
+		Pattern PatronExpresionNumerica = Pattern.compile(expresionNumerica);
+
+		String in = "^in$";
+		Pattern PatronIn = Pattern.compile(in);
 
 		String id = "^[a-zA-Z]+$";
 		Pattern PatronId = Pattern.compile(id);
 
 		String puntoComa = "^[;]$";
 		Pattern PatronPuntoComa = Pattern.compile(puntoComa);
-
-		/*
-		 * // Seteamos los próximos a probar String setPosition =
-		 * "\\b(setposition)\\b"; Pattern PatronSetPosition =
-		 * Pattern.compile(setPosition);
-		 * 
-		 * String setColor = "\\b(setcolor)\\b"; Pattern PatronSetColor =
-		 * Pattern.compile(setColor);
-		 * 
-		 * String setBase = "\\b(setbase)\\b"; Pattern PatronSetBase =
-		 * Pattern.compile(setBase);
-		 * 
-		 * String setHeight = "\\b(setheight)\\b"; Pattern PatronSetHeight =
-		 * Pattern.compile(setHeight);
-		 * 
-		 * String setRadius = "\\b(setradius)\\b"; Pattern PatronSetRadius =
-		 * Pattern.compile(setRadius);
-		 * 
-		 * String colorDef =
-		 * "#[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]"
-		 * ; Pattern PatronColor = Pattern.compile(colorDef);
-		 * 
-		 * String expresionNumerica =
-		 * "(^[-+]?[0-9]*\\.?[0-9]+$)|(\\()|(\\))|(\\*)|(\\+)|(\\-)|(\\/)";
-		 * Pattern PatronNumericExpression = Pattern.compile(expresionNumerica);
-		 */
 
 		StringTokenizer stringTokenizer = new StringTokenizer(code);
 
@@ -117,7 +115,73 @@ public class LexicalAnalyzer implements Interpreter {
 				tokens.add(token);
 
 				tokenEncontrado = true;
+			}
 
+			Matcher matcherSetColor = PatronSetColor.matcher(tokenActual);
+			if (!tokenEncontrado && matcherSetColor.matches() && !lexNoValido) {
+				System.out.println("Token: SetColor - Lexema: " + tokenActual);
+
+				token = new Token();
+				token.setTipoToken("setcolor");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
+			}
+
+			Matcher matcherSetBase = PatronSetBase.matcher(tokenActual);
+			if (!tokenEncontrado && matcherSetBase.matches() && !lexNoValido) {
+				System.out.println("Token: SetBase - Lexema: " + tokenActual);
+
+				token = new Token();
+				token.setTipoToken("setbase");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
+			}
+
+			Matcher matcherSetHeight = PatronSetHeight.matcher(tokenActual);
+			if (!tokenEncontrado && matcherSetHeight.matches() && !lexNoValido) {
+				System.out.println("Token: SetHeight - Lexema: " + tokenActual);
+
+				token = new Token();
+				token.setTipoToken("setheight");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
+			}
+
+			Matcher matcherSetRadius = PatronSetRadius.matcher(tokenActual);
+			if (!tokenEncontrado && matcherSetRadius.matches() && !lexNoValido) {
+				System.out.println("Token: SetRadius - Lexema: " + tokenActual);
+
+				token = new Token();
+				token.setTipoToken("setradius");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
+			}
+
+			Matcher matcherSetPosition = PatronSetPosition.matcher(tokenActual);
+			if (!tokenEncontrado && matcherSetPosition.matches()
+					&& !lexNoValido) {
+				System.out.println("Token: SetPosition - Lexema: "
+						+ tokenActual);
+
+				token = new Token();
+				token.setTipoToken("setposition");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
 			}
 
 			Matcher matcherForma = PatronForma.matcher(tokenActual);
@@ -130,7 +194,47 @@ public class LexicalAnalyzer implements Interpreter {
 				tokens.add(token);
 
 				tokenEncontrado = true;
+			}
 
+			Matcher matcherColor = PatronColor.matcher(tokenActual);
+			if (!tokenEncontrado && matcherColor.matches() && !lexNoValido) {
+				System.out.println("Token: Color - Lexema: " + tokenActual);
+				token = new Token();
+				token.setTipoToken("color");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
+			}
+
+			Matcher matcherExpresionNumerica = PatronExpresionNumerica
+					.matcher(tokenActual);
+			if (!tokenEncontrado && matcherExpresionNumerica.matches()
+					&& !lexNoValido) {
+				System.out.println("Token: Expresión Numérica - Lexema: "
+						+ tokenActual);
+
+				token = new Token();
+				token.setTipoToken("expresion");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
+			}
+
+			Matcher matcherIn = PatronIn.matcher(tokenActual);
+			if (!tokenEncontrado && matcherIn.matches() && !lexNoValido) {
+				System.out.println("Token: In - Lexema: " + tokenActual);
+
+				token = new Token();
+				token.setTipoToken("in");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
 			}
 
 			Matcher matcherId = PatronId.matcher(tokenActual);
@@ -143,7 +247,6 @@ public class LexicalAnalyzer implements Interpreter {
 				tokens.add(token);
 
 				tokenEncontrado = true;
-
 			}
 
 			if (finDeSentencia) {
@@ -151,7 +254,6 @@ public class LexicalAnalyzer implements Interpreter {
 			}
 
 			if (!tokenEncontrado) {
-
 				System.out
 						.println("'" + tokenActual + "': lexema desconocido.");
 				token = new Token();
@@ -161,6 +263,8 @@ public class LexicalAnalyzer implements Interpreter {
 				tokens.add(token);
 				huboErrores = true;
 			}
+			
+			//create circle circulo;
 
 			if (!tokenFinal.equalsIgnoreCase("")) {
 
@@ -185,9 +289,7 @@ public class LexicalAnalyzer implements Interpreter {
 				tokens.add(token);
 
 				// tokenEncontrado = true;
-
 			}
-
 		}
 
 		if (huboErrores) {
@@ -210,9 +312,10 @@ public class LexicalAnalyzer implements Interpreter {
 		List<Token> tokens = new LinkedList<>();
 
 		for (String line : lines) {
-			System.out.println("Sentencia a analizar: ' " + line + " '");
+			System.out.println("Sentencia a analizar: \n'" + line + "' \n");
+			System.out.println("Análisis léxico:");
 			tokens.addAll(analyze(line));
-			System.out.println("-----------------------------------\n");
+			System.out.println("-----------------------------------");
 		}
 	}
 
