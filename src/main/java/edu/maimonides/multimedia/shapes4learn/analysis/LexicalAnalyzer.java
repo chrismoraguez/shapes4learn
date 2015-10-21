@@ -263,8 +263,8 @@ public class LexicalAnalyzer implements Interpreter {
 				tokens.add(token);
 				huboErrores = true;
 			}
-			
-			//create circle circulo;
+
+			// create circle circulo;
 
 			if (!tokenFinal.equalsIgnoreCase("")) {
 
@@ -308,14 +308,18 @@ public class LexicalAnalyzer implements Interpreter {
 	@Override
 	public void interpret(String code, ShapeAmbient ambient)
 			throws CodeException {
+		code = code.replace(";", ";\n");
+		System.out.println("HERNAN TRAGALECHE");
 		String[] lines = StringUtils.split(code, "\n");
 		List<Token> tokens = new LinkedList<>();
 
 		for (String line : lines) {
-			System.out.println("Sentencia a analizar: \n'" + line + "' \n");
-			System.out.println("Análisis léxico:");
-			tokens.addAll(analyze(line));
-			System.out.println("-----------------------------------");
+			if (!line.trim().equalsIgnoreCase("")) {
+				System.out.println("Sentencia a analizar: \n'" + line + "' \n");
+				System.out.println("Análisis léxico:");
+				tokens.addAll(analyze(line));
+				System.out.println("-----------------------------------");
+			}
 		}
 	}
 
