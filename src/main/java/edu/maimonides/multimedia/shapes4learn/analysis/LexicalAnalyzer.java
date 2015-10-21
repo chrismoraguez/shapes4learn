@@ -296,12 +296,12 @@ public class LexicalAnalyzer implements Interpreter {
 			System.out.println("El analizador léxico ha encontrado errores.");
 		}
 
-		Iterator<Token> iterator = tokens.iterator();
-
-		while (iterator.hasNext()) {
-			System.out.println(iterator.next().getTipoToken());
-		}
-
+		/*
+		 * Iterator<Token> iterator = tokens.iterator();
+		 * 
+		 * while (iterator.hasNext()) {
+		 * System.out.println(iterator.next().getTipoToken()); }
+		 */
 		return tokens;
 	}
 
@@ -309,7 +309,6 @@ public class LexicalAnalyzer implements Interpreter {
 	public void interpret(String code, ShapeAmbient ambient)
 			throws CodeException {
 		code = code.replace(";", ";\n");
-		System.out.println("HERNAN TRAGALECHE");
 		String[] lines = StringUtils.split(code, "\n");
 		List<Token> tokens = new LinkedList<>();
 
