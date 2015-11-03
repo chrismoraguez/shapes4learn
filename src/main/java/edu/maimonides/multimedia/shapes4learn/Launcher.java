@@ -1,7 +1,11 @@
 package edu.maimonides.multimedia.shapes4learn;
 
 import edu.maimonides.multimedia.shapes4learn.analysis.LexicalAnalyzer;
+import edu.maimonides.multimedia.shapes4learn.analysis.SyntacticAnalyzer;
+import edu.maimonides.multimedia.shapes4learn.analysis.SyntacticException;
 import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
+import edu.maimonides.multimedia.shapes4learn.model.Token;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -10,6 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
 import java.awt.Color;
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -69,10 +76,17 @@ public class Launcher {
 			private void BotonActionPerformed(ActionEvent evt) {
 				String texto;
 				texto = areaTexto.getText();
+				List<Token> listaTokens = new LinkedList<>();
 
 				LexicalAnalyzer analizadorLexico = new LexicalAnalyzer();
+				SyntacticAnalyzer analizadorSintactico = new SyntacticAnalyzer();
 				try {
-					analizadorLexico.interpret(texto, null);
+					listaTokens.addAll(analizadorLexico.interpret(texto, null));
+					try {
+						analizadorSintactico.analyze(listaTokens);
+					} catch (SyntacticException e) {
+						e.printStackTrace();
+					}
 				} catch (CodeException e) {
 					e.printStackTrace();
 				}

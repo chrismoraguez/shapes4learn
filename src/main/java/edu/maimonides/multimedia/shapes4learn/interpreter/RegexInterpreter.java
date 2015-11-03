@@ -2,11 +2,15 @@ package edu.maimonides.multimedia.shapes4learn.interpreter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
+import edu.maimonides.multimedia.shapes4learn.model.Token;
 import edu.maimonides.multimedia.shapes4learn.model.shapes.Rectangle;
 import edu.maimonides.multimedia.shapes4learn.model.shapes.Shape;
 import edu.maimonides.multimedia.shapes4learn.utils.ColorUtils;
@@ -40,12 +44,13 @@ public class RegexInterpreter implements Interpreter {
 	}
 
 	@Override
-	public void interpret(String code, ShapeAmbient ambient) throws CodeException {
+	public List<Token> interpret(String code, ShapeAmbient ambient) throws CodeException {
 		String[] lines = StringUtils.split(code, "\n");
 
 		for (String line : lines) {
 			interpretLine(line, ambient);
 		}
+		return null;
 	}
 
 	private void interpretLine(String code, ShapeAmbient ambient) throws CodeException {

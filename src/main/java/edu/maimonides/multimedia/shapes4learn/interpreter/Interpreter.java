@@ -2,8 +2,10 @@ package edu.maimonides.multimedia.shapes4learn.interpreter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
+import edu.maimonides.multimedia.shapes4learn.model.Token;
 
 /**
  * This class is the entry-point for the Shape4Learn Interpreter and define its
@@ -22,8 +24,9 @@ public interface Interpreter {
 	 *            A {@link String} representing the entire source code.
 	 * @param ambient
 	 *            The {@link ShapeAmbient} where the code will be interpreted.
+	 * @return 
 	 */
-	public void interpret(String code, ShapeAmbient ambient) throws CodeException;
+	public List<Token> interpret(String code, ShapeAmbient ambient) throws CodeException;
 
 	/**
 	 * Interprets a source as a stream. Characters are read on demand and

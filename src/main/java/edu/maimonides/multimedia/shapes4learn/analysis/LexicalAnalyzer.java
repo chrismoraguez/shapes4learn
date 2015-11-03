@@ -2,16 +2,13 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-
 import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
 import edu.maimonides.multimedia.shapes4learn.interpreter.Interpreter;
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
@@ -75,7 +72,6 @@ public class LexicalAnalyzer implements Interpreter {
 		String tokenActual = "";
 		String tokenFinal = "";
 
-		// prueba
 		String tokenPuntoComa = "";
 
 		boolean huboErrores = false;
@@ -264,8 +260,6 @@ public class LexicalAnalyzer implements Interpreter {
 				huboErrores = true;
 			}
 
-			// create circle circulo;
-
 			if (!tokenFinal.equalsIgnoreCase("")) {
 
 				System.out.println("'" + tokenFinal + "': lexema desconocido.");
@@ -306,7 +300,7 @@ public class LexicalAnalyzer implements Interpreter {
 	}
 
 	@Override
-	public void interpret(String code, ShapeAmbient ambient)
+	public List<Token> interpret(String code, ShapeAmbient ambient)
 			throws CodeException {
 		code = code.replace(";", ";\n");
 		String[] lines = StringUtils.split(code, "\n");
@@ -320,6 +314,8 @@ public class LexicalAnalyzer implements Interpreter {
 				System.out.println("-----------------------------------");
 			}
 		}
+
+		return tokens;
 	}
 
 	@Override

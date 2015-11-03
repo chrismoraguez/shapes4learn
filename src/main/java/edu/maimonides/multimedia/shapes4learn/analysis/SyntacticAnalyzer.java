@@ -18,11 +18,29 @@ public class SyntacticAnalyzer {
 	public SyntacticAnalyzer() {
 	}
 
+	public String lookahead;
+
 	public AST analyze(List<Token> tokens) throws SyntacticException {
 		AST ast = new AST();
 
-		// TODO Implement.
+		// Si hay lexemas desconocidos, ¿ es necesario igual realizar el
+		// análisis sintáctico ?
+
+		for (Token token : tokens) {
+			lookahead = token.getTipoToken();
+
+			System.out.println("Token: " + token.getLexema());
+			if (!lookahead.equals(";")) {
+				
+			}
+		}
+
+		checkOrder();
 
 		return ast;
+	}
+
+	private void checkOrder() {
+
 	}
 }
