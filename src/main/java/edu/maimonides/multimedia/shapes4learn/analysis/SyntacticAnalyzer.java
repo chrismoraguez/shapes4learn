@@ -23,6 +23,8 @@ public class SyntacticAnalyzer {
 	public AST analyze(List<Token> tokens) throws SyntacticException {
 		AST ast = new AST();
 
+		//TEST SYNC
+		
 		// Si hay lexemas desconocidos, ¿ es necesario igual realizar el
 		// análisis sintáctico ?
 
