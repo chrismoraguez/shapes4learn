@@ -64,6 +64,9 @@ public class LexicalAnalyzer implements Interpreter {
 		String id = "^[a-zA-Z]+$";
 		Pattern PatronId = Pattern.compile(id);
 
+		String coma = "^[,]$";
+		Pattern PatronComa = Pattern.compile(coma);
+
 		String puntoComa = "^[;]$";
 		Pattern PatronPuntoComa = Pattern.compile(puntoComa);
 
@@ -220,6 +223,19 @@ public class LexicalAnalyzer implements Interpreter {
 				tokenEncontrado = true;
 			}
 
+			Matcher matcherComa = PatronComa.matcher(tokenActual);
+			if (!tokenEncontrado && matcherComa.matches() && !lexNoValido) {
+				System.out.println("Token: Coma - Lexema: " + tokenActual);
+
+				token = new Token();
+				token.setTipoToken("coma");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
+			}
+
 			Matcher matcherIn = PatronIn.matcher(tokenActual);
 			if (!tokenEncontrado && matcherIn.matches() && !lexNoValido) {
 				System.out.println("Token: In - Lexema: " + tokenActual);
@@ -254,7 +270,7 @@ public class LexicalAnalyzer implements Interpreter {
 						.println("'" + tokenActual + "': lexema desconocido.");
 				token = new Token();
 				token.setLexema(tokenActual);
-				token.setTipoToken("Lexema Desconocido");
+				token.setTipoToken("lexema desconocido");
 				token.setValidez(false);
 				tokens.add(token);
 				huboErrores = true;
@@ -265,7 +281,7 @@ public class LexicalAnalyzer implements Interpreter {
 				System.out.println("'" + tokenFinal + "': lexema desconocido.");
 				token = new Token();
 				token.setLexema(tokenFinal);
-				token.setTipoToken("Lexema Desconocido");
+				token.setTipoToken("lexema desconocido");
 				token.setValidez(false);
 				tokens.add(token);
 				huboErrores = true;
@@ -277,7 +293,7 @@ public class LexicalAnalyzer implements Interpreter {
 				System.out.println("Token: Fin de Sentencia - Lexema: ;");
 
 				token = new Token();
-				token.setTipoToken("Fin de sentencia");
+				token.setTipoToken("fin de sentencia");
 				token.setLexema(tokenPuntoComa);
 				token.setValidez(true);
 				tokens.add(token);
@@ -303,6 +319,7 @@ public class LexicalAnalyzer implements Interpreter {
 	public List<Token> interpret(String code, ShapeAmbient ambient)
 			throws CodeException {
 		code = code.replace(";", ";\n");
+		code = code.replace(",", " , ");
 		String[] lines = StringUtils.split(code, "\n");
 		List<Token> tokens = new LinkedList<>();
 
@@ -314,7 +331,6 @@ public class LexicalAnalyzer implements Interpreter {
 				System.out.println("-----------------------------------");
 			}
 		}
-
 		return tokens;
 	}
 
