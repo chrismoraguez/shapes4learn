@@ -209,7 +209,7 @@ public class LexicalAnalyzer implements Interpreter {
 
 			Matcher matcherExpresionNumerica = PatronExpresionNumerica
 					.matcher(tokenActual);
-			if (!tokenEncontrado && matcherExpresionNumerica.matches()
+			if (!tokenEncontrado && matcherExpresionNumerica.find()
 					&& !lexNoValido) {
 				System.out.println("Token: Expresión Numérica - Lexema: "
 						+ tokenActual);

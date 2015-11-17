@@ -283,7 +283,7 @@ public class SyntacticAnalyzer {
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
-				System.out.println("Error: Se esperaba palabra del tipo SHAPE");
+				System.out.println("Error: Se esperaba palabra del tipo COLOR");
 				System.out.println();
 				return false;
 			}
@@ -447,7 +447,8 @@ public class SyntacticAnalyzer {
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
-				System.out.println("Error: Se esperaba palabra del tipo SHAPE");
+				System.out
+						.println("Error: Se esperaba palabra del tipo EXPRESION");
 				System.out.println();
 				return false;
 			}
