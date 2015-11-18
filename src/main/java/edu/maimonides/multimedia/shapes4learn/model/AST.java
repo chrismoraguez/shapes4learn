@@ -12,6 +12,25 @@ import java.util.List;
  * 
  */
 public class AST {
+	
+	public String tipoToken;
+	public Integer lineNumber;
+	
+	public String getTipoToken() {
+		return tipoToken;
+	}
+
+	public void setTipoToken(String tipoToken) {
+		this.tipoToken = tipoToken;
+	}
+
+	public Integer getLineNumber() {
+		return lineNumber;
+	}
+
+	public void setLineNumber(Integer lineNumber) {
+		this.lineNumber = lineNumber;
+	}
 
 	/**
 	 * The {@link AST} children.

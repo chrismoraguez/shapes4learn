@@ -20,9 +20,21 @@ public class SyntacticAnalyzer {
 
 	public String tipoToken;
 	public Integer lineNumber = 1;
+	public AST nodoPrincipal = new AST();
+	public AST astCreate = new AST();
+	public AST astForma = new AST();
+	public AST astID = new AST();
+	public AST astSetColor = new AST();
+	public AST astColor = new AST();
+	public AST astSetBase = new AST();
+	public AST astExpresion = new AST();
+	public AST astSetHeight = new AST();
+	public AST astSetRadius = new AST();
+	public AST astSetPosition = new AST();
+	public AST astExpresion2 = new AST();
 
 	public AST analyze(List<Token> tokens) throws SyntacticException {
-		AST ast = new AST();
+
 		List<Token> sentenceGrammar = new ArrayList<>();
 
 		System.out.println("-----------------------------------");
@@ -45,7 +57,43 @@ public class SyntacticAnalyzer {
 			}
 		}
 
-		return ast;
+		System.out.println("Cantidad de hijos: "
+				+ nodoPrincipal.listChildren().size());
+
+		for (int i = 0; i < nodoPrincipal.listChildren().size(); i++) {
+
+			if (nodoPrincipal.getChild(i).getTipoToken().equals("setposition")) {
+				String nodoPadre = nodoPrincipal.getChild(i).getTipoToken();
+				String nodoHijo1 = nodoPrincipal.getChild(i).getChild(0)
+						.getTipoToken();
+				String nodoHijo2 = nodoPrincipal.getChild(i).getChild(1)
+						.getTipoToken();
+				String nodoHijo3 = nodoPrincipal.getChild(i).getChild(2)
+						.getTipoToken();
+
+				System.out.printf("Representación árbol (izq-der): \n");
+
+				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
+				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
+				System.out.printf("- 2do Hijo: %s ", nodoHijo2);
+				System.out.printf("- 3er Hijo: %s \n", nodoHijo3);
+
+			} else {
+				String nodoPadre = nodoPrincipal.getChild(i).getTipoToken();
+				String nodoHijo1 = nodoPrincipal.getChild(i).getChild(0)
+						.getTipoToken();
+				String nodoHijo2 = nodoPrincipal.getChild(i).getChild(1)
+						.getTipoToken();
+
+				System.out.printf("Representación árbol (izq-der): \n");
+
+				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
+				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
+				System.out.printf("- 2do Hijo: %s \n", nodoHijo2);
+			}
+		}
+
+		return nodoPrincipal;
 	}
 
 	private void checkSentence(List<Token> sentences, Integer lineNumber) {
@@ -105,6 +153,9 @@ public class SyntacticAnalyzer {
 		// Debe ser SETPOSITION
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setposition")) {
+
+				astSetPosition.setTipoToken(word.getLexema());
+				astSetPosition.setLineNumber(lineNumber);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -117,6 +168,10 @@ public class SyntacticAnalyzer {
 		// Debe ser EXPRESSION
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("expresion")) {
+
+				astExpresion.setTipoToken(word.getLexema());
+				astExpresion.setLineNumber(lineNumber);
+				astSetPosition.addChild(astExpresion);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -144,6 +199,10 @@ public class SyntacticAnalyzer {
 		// Debe ser EXPRESSION
 		if (wordNumber == 4) {
 			if (word.getTipoToken().equals("expresion")) {
+
+				astExpresion2.setTipoToken(word.getLexema());
+				astExpresion2.setLineNumber(lineNumber);
+				astSetPosition.addChild(astExpresion2);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -183,6 +242,10 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 7) {
 			if (word.getTipoToken().equals("id")) {
+
+				astID.setTipoToken(word.getLexema());
+				astID.setLineNumber(lineNumber);
+				astSetPosition.addChild(astID);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -196,6 +259,23 @@ public class SyntacticAnalyzer {
 		// Debe ser FIN DE SENTENCIA
 		if (wordNumber == 8) {
 			if (word.getTipoToken().equals("fin de sentencia")) {
+
+				nodoPrincipal.addChild(astSetPosition);
+				String nodoPadre = nodoPrincipal.getChild(5).getTipoToken();
+				String nodoHijo1 = nodoPrincipal.getChild(5).getChild(0)
+						.getTipoToken();
+				String nodoHijo2 = nodoPrincipal.getChild(5).getChild(1)
+						.getTipoToken();
+				String nodoHijo3 = nodoPrincipal.getChild(5).getChild(2)
+						.getTipoToken();
+
+				System.out
+						.printf("Representación árbol (izq-der) de la función SetPosition: \n");
+
+				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
+				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
+				System.out.printf("- 2do Hijo: %s ", nodoHijo2);
+				System.out.printf("- 3er Hijo: %s\n\n", nodoHijo3);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -210,9 +290,13 @@ public class SyntacticAnalyzer {
 
 	private boolean checkOrderCreate(Token word, Integer wordNumber,
 			Integer lineNumber) {
+
 		// Debe ser CREATE
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("create")) {
+
+				astCreate.setTipoToken(word.getLexema());
+				astCreate.setLineNumber(lineNumber);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -224,6 +308,10 @@ public class SyntacticAnalyzer {
 		// Debe ser SHAPE
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("forma")) {
+
+				astForma.setTipoToken(word.getLexema());
+				astForma.setLineNumber(lineNumber);
+				astCreate.addChild(astForma);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -237,6 +325,10 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 3) {
 			if (word.getTipoToken().equals("id")) {
+
+				astID.setTipoToken(word.getLexema());
+				astID.setLineNumber(lineNumber);
+				astCreate.addChild(astID);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -250,6 +342,20 @@ public class SyntacticAnalyzer {
 		// Debe ser FIN DE SENTENCIA
 		if (wordNumber == 4) {
 			if (word.getTipoToken().equals("fin de sentencia")) {
+
+				nodoPrincipal.addChild(astCreate);
+				String nodoPadre = nodoPrincipal.getChild(0).getTipoToken();
+				String nodoHijo1 = nodoPrincipal.getChild(0).getChild(0)
+						.getTipoToken();
+				String nodoHijo2 = nodoPrincipal.getChild(0).getChild(1)
+						.getTipoToken();
+
+				System.out
+						.printf("Representación árbol (izq-der) de la función Create: \n");
+
+				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
+				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
+				System.out.printf("- 2do Hijo: %s\n\n", nodoHijo2);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -259,7 +365,6 @@ public class SyntacticAnalyzer {
 				return false;
 			}
 		}
-
 		return false;
 	}
 
@@ -268,6 +373,9 @@ public class SyntacticAnalyzer {
 		// Debe ser SETCOLOR
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setcolor")) {
+
+				astSetColor.setTipoToken(word.getLexema());
+				astSetColor.setLineNumber(lineNumber);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -279,6 +387,10 @@ public class SyntacticAnalyzer {
 		// Debe ser COLOR_DEF
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("color")) {
+
+				astColor.setTipoToken(word.getLexema());
+				astColor.setLineNumber(lineNumber);
+				astSetColor.addChild(astColor);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -318,6 +430,10 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 5) {
 			if (word.getTipoToken().equals("id")) {
+
+				astID.setTipoToken(word.getLexema());
+				astID.setLineNumber(lineNumber);
+				astSetColor.addChild(astID);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -331,6 +447,20 @@ public class SyntacticAnalyzer {
 		// Debe ser FIN DE SENTENCIA
 		if (wordNumber == 6) {
 			if (word.getTipoToken().equals("fin de sentencia")) {
+				nodoPrincipal.addChild(astSetColor);
+				String nodoPadre = nodoPrincipal.getChild(1).getTipoToken();
+				String nodoHijo1 = nodoPrincipal.getChild(1).getChild(0)
+						.getTipoToken();
+				String nodoHijo2 = nodoPrincipal.getChild(1).getChild(1)
+						.getTipoToken();
+
+				System.out
+						.printf("Representación árbol (izq-der) de la función SetColor: \n");
+
+				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
+				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
+				System.out.printf("- 2do Hijo: %s\n\n", nodoHijo2);
+
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -340,7 +470,6 @@ public class SyntacticAnalyzer {
 				return false;
 			}
 		}
-
 		return false;
 	}
 
@@ -349,6 +478,9 @@ public class SyntacticAnalyzer {
 		// Debe ser SETBASE
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setbase")) {
+
+				astSetBase.setTipoToken(word.getLexema());
+				astSetBase.setLineNumber(lineNumber);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -361,6 +493,10 @@ public class SyntacticAnalyzer {
 		// Debe ser EXPRESSION
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("expresion")) {
+
+				astExpresion.setTipoToken(word.getLexema());
+				astExpresion.setLineNumber(lineNumber);
+				astSetBase.addChild(astExpresion);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -401,6 +537,10 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 5) {
 			if (word.getTipoToken().equals("id")) {
+
+				astID.setTipoToken(word.getLexema());
+				astID.setLineNumber(lineNumber);
+				astSetBase.addChild(astID);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -414,6 +554,21 @@ public class SyntacticAnalyzer {
 		// Debe ser FIN DE SENTENCIA
 		if (wordNumber == 6) {
 			if (word.getTipoToken().equals("fin de sentencia")) {
+
+				nodoPrincipal.addChild(astSetBase);
+				String nodoPadre = nodoPrincipal.getChild(2).getTipoToken();
+				String nodoHijo1 = nodoPrincipal.getChild(2).getChild(0)
+						.getTipoToken();
+				String nodoHijo2 = nodoPrincipal.getChild(2).getChild(1)
+						.getTipoToken();
+
+				System.out
+						.printf("Representación árbol (izq-der) de la función SetBase: \n");
+
+				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
+				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
+				System.out.printf("- 2do Hijo: %s\n\n", nodoHijo2);
+
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -423,7 +578,6 @@ public class SyntacticAnalyzer {
 				return false;
 			}
 		}
-
 		return false;
 	}
 
@@ -432,6 +586,9 @@ public class SyntacticAnalyzer {
 		// Debe ser SETHEIGHT
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setheight")) {
+
+				astSetHeight.setTipoToken(word.getLexema());
+				astSetHeight.setLineNumber(lineNumber);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -443,6 +600,10 @@ public class SyntacticAnalyzer {
 		// Debe ser EXPRESSION
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("expresion")) {
+
+				astExpresion.setTipoToken(word.getLexema());
+				astExpresion.setLineNumber(lineNumber);
+				astSetHeight.addChild(astExpresion);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -483,6 +644,10 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 5) {
 			if (word.getTipoToken().equals("id")) {
+
+				astID.setTipoToken(word.getLexema());
+				astID.setLineNumber(lineNumber);
+				astSetHeight.addChild(astID);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -496,6 +661,21 @@ public class SyntacticAnalyzer {
 		// Debe ser FIN DE SENTENCIA
 		if (wordNumber == 6) {
 			if (word.getTipoToken().equals("fin de sentencia")) {
+
+				nodoPrincipal.addChild(astSetHeight);
+				String nodoPadre = nodoPrincipal.getChild(3).getTipoToken();
+				String nodoHijo1 = nodoPrincipal.getChild(3).getChild(0)
+						.getTipoToken();
+				String nodoHijo2 = nodoPrincipal.getChild(3).getChild(1)
+						.getTipoToken();
+
+				System.out
+						.printf("Representación árbol (izq-der) de la función SetHeight: \n");
+
+				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
+				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
+				System.out.printf("- 2do Hijo: %s\n\n", nodoHijo2);
+
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -505,7 +685,6 @@ public class SyntacticAnalyzer {
 				return false;
 			}
 		}
-
 		return false;
 	}
 
@@ -513,7 +692,10 @@ public class SyntacticAnalyzer {
 			Integer lineNumber) {
 		// Debe ser RADIUS
 		if (wordNumber == 1) {
-			if (word.getTipoToken().equals("setheight")) {
+			if (word.getTipoToken().equals("setradius")) {
+
+				astSetRadius.setTipoToken(word.getLexema());
+				astSetRadius.setLineNumber(lineNumber);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -525,6 +707,10 @@ public class SyntacticAnalyzer {
 		// Debe ser EXPRESSION
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("expresion")) {
+
+				astExpresion.setTipoToken(word.getLexema());
+				astExpresion.setLineNumber(lineNumber);
+				astSetRadius.addChild(astExpresion);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -564,6 +750,10 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 5) {
 			if (word.getTipoToken().equals("id")) {
+
+				astID.setTipoToken(word.getLexema());
+				astID.setLineNumber(lineNumber);
+				astSetRadius.addChild(astID);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -577,6 +767,20 @@ public class SyntacticAnalyzer {
 		// Debe ser FIN DE SENTENCIA
 		if (wordNumber == 6) {
 			if (word.getTipoToken().equals("fin de sentencia")) {
+
+				nodoPrincipal.addChild(astSetRadius);
+				String nodoPadre = nodoPrincipal.getChild(4).getTipoToken();
+				String nodoHijo1 = nodoPrincipal.getChild(4).getChild(0)
+						.getTipoToken();
+				String nodoHijo2 = nodoPrincipal.getChild(4).getChild(1)
+						.getTipoToken();
+
+				System.out
+						.printf("Representación árbol (izq-der) de la función SetRadius: \n");
+
+				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
+				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
+				System.out.printf("- 2do Hijo: %s\n\n", nodoHijo2);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -586,7 +790,6 @@ public class SyntacticAnalyzer {
 				return false;
 			}
 		}
-
 		return false;
 	}
 
