@@ -13,15 +13,15 @@ import java.util.List;
  */
 public class AST {
 	
-	public String tipoToken;
+	public String value="";
 	public Integer lineNumber;
 	
-	public String getTipoToken() {
-		return tipoToken;
+	public String getValue() {
+		return value;
 	}
 
-	public void setTipoToken(String tipoToken) {
-		this.tipoToken = tipoToken;
+	public void setValue(String tipoToken) {
+		this.value = tipoToken;
 	}
 
 	public Integer getLineNumber() {
