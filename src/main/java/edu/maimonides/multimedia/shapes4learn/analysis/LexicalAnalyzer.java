@@ -297,8 +297,6 @@ public class LexicalAnalyzer implements Interpreter {
 				token.setLexema(tokenPuntoComa);
 				token.setValidez(true);
 				tokens.add(token);
-
-				// tokenEncontrado = true;
 			}
 		}
 
@@ -306,12 +304,6 @@ public class LexicalAnalyzer implements Interpreter {
 			System.out.println("El analizador léxico ha encontrado errores.");
 		}
 
-		/*
-		 * Iterator<Token> iterator = tokens.iterator();
-		 * 
-		 * while (iterator.hasNext()) {
-		 * System.out.println(iterator.next().getTipoToken()); }
-		 */
 		return tokens;
 	}
 
