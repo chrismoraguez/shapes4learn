@@ -2,6 +2,9 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+
+import javax.management.StringValueExp;
 
 import edu.maimonides.multimedia.shapes4learn.model.AST;
 import edu.maimonides.multimedia.shapes4learn.model.Pila;
@@ -22,6 +25,7 @@ public class SyntacticAnalyzer {
 
 	public String tipoToken;
 	public Integer lineNumber = 1;
+	public Integer astIteratorNumber = 0;
 	public AST nodoPrincipal = new AST();
 	public AST nodoPrincipalExpr = new AST();
 	public AST astCreate = new AST();
@@ -62,39 +66,11 @@ public class SyntacticAnalyzer {
 		System.out.println("Cantidad de hijos: "
 				+ nodoPrincipal.listChildren().size());
 
-		for (int i = 0; i < nodoPrincipal.listChildren().size(); i++) {
-
-			if (nodoPrincipal.getChild(i).getValue().equals("setposition")) {
-				String nodoPadre = nodoPrincipal.getChild(i).getValue();
-				String nodoHijo1 = nodoPrincipal.getChild(i).getChild(0)
-						.getValue();
-				String nodoHijo2 = nodoPrincipal.getChild(i).getChild(1)
-						.getValue();
-				String nodoHijo3 = nodoPrincipal.getChild(i).getChild(2)
-						.getValue();
-
-				System.out.printf("Representación árbol (izq-der): \n");
-
-				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
-				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
-				System.out.printf("- 2do Hijo: %s ", nodoHijo2);
-				System.out.printf("- 3er Hijo: %s \n", nodoHijo3);
-
-			} else {
-				String nodoPadre = nodoPrincipal.getChild(i).getValue();
-				String nodoHijo1 = nodoPrincipal.getChild(i).getChild(0)
-						.getValue();
-				String nodoHijo2 = nodoPrincipal.getChild(i).getChild(1)
-						.getValue();
-
-				System.out.printf("Representación árbol (izq-der): \n");
-
-				System.out.printf("- Nodo Padre: %s\n", nodoPadre);
-				System.out.printf("- 1er Hijo: %s ", nodoHijo1);
-				System.out.printf("- 2do Hijo: %s \n", nodoHijo2);
-			}
-		}
-
+		// Se recorre e imprime el AST
+		visitAST(nodoPrincipal);
+		
+	
+		
 		return nodoPrincipal;
 	}
 
@@ -153,6 +129,7 @@ public class SyntacticAnalyzer {
 		// Debe ser SETPOSITION
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setposition")) {
+				astSetPosition = new AST();
 				astSetPosition.setValue(word.getLexema());
 				astSetPosition.setLineNumber(lineNumber);
 				return true;
@@ -169,21 +146,12 @@ public class SyntacticAnalyzer {
 			if (word.getTipoToken().equals("expresion")) {
 				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
-
+				
 				// Se confecciona el AST de la expresion aritmetica
-				AST tmp = createExpressionAST(inversa, lineNumber);
-				astExpresion.setValue(word.getLexema());
-				astExpresion.setLineNumber(lineNumber);
-
-				System.out.println("Raiz ---> " + tmp.getValue());
-				System.out.println("Nodo 0 --->  " + tmp.getChild(0).getValue());
-				System.out.println("Nodo 1 --->  " + tmp.getChild(1).getValue());
-				System.out.println("Nodo 1.1 --->  " + tmp.getChild(1).getChild(0).getValue());
-				System.out.println("Nodo 1.2 --->  " + tmp.getChild(1).getChild(1).getValue());
-
-				System.exit(0);
-
-				astSetBase.addChild(astExpresion);
+				astExpresion = new AST();
+				astExpresion = createAritmeticNode(inversa);
+				astSetHeight.addChild(astExpresion);
+				
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -213,21 +181,12 @@ public class SyntacticAnalyzer {
 			if (word.getTipoToken().equals("expresion")) {
 				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
-
+				
 				// Se confecciona el AST de la expresion aritmetica
-				AST tmp = createExpressionAST(inversa, lineNumber);
-				astExpresion.setValue(word.getLexema());
-				astExpresion.setLineNumber(lineNumber);
-
-				System.out.println("Raiz ---> " + tmp.getValue());
-				System.out.println("Nodo 0 --->  " + tmp.getChild(0).getValue());
-				System.out.println("Nodo 1 --->  " + tmp.getChild(1).getValue());
-				System.out.println("Nodo 1.1 --->  " + tmp.getChild(1).getChild(0).getValue());
-				System.out.println("Nodo 1.2 --->  " + tmp.getChild(1).getChild(1).getValue());
-
-				System.exit(0);
-
-				astSetBase.addChild(astExpresion);
+				astExpresion = new AST();
+				astExpresion = createAritmeticNode(inversa);
+				astSetHeight.addChild(astExpresion);
+				
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -267,6 +226,7 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 7) {
 			if (word.getTipoToken().equals("id")) {
+				astID = new AST();
 				astID.setValue(word.getLexema());
 				astID.setLineNumber(lineNumber);
 				astSetPosition.addChild(astID);
@@ -302,6 +262,7 @@ public class SyntacticAnalyzer {
 		// Debe ser CREATE
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("create")) {
+				astCreate = new AST();
 				astCreate.setValue(word.getLexema());
 				astCreate.setLineNumber(lineNumber);
 				return true;
@@ -315,6 +276,7 @@ public class SyntacticAnalyzer {
 		// Debe ser SHAPE
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("forma")) {
+				astForma = new AST();
 				astForma.setValue(word.getLexema());
 				astForma.setLineNumber(lineNumber);
 				astCreate.addChild(astForma);
@@ -331,7 +293,7 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 3) {
 			if (word.getTipoToken().equals("id")) {
-
+				astID = new AST();
 				astID.setValue(word.getLexema());
 				astID.setLineNumber(lineNumber);
 				astCreate.addChild(astID);
@@ -366,7 +328,7 @@ public class SyntacticAnalyzer {
 		// Debe ser SETCOLOR
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setcolor")) {
-
+				astSetColor = new AST();
 				astSetColor.setValue(word.getLexema());
 				astSetColor.setLineNumber(lineNumber);
 				return true;
@@ -380,7 +342,7 @@ public class SyntacticAnalyzer {
 		// Debe ser COLOR_DEF
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("color")) {
-
+				astColor = new AST();
 				astColor.setValue(word.getLexema());
 				astColor.setLineNumber(lineNumber);
 				astSetColor.addChild(astColor);
@@ -423,7 +385,7 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 5) {
 			if (word.getTipoToken().equals("id")) {
-
+				astID = new AST();
 				astID.setValue(word.getLexema());
 				astID.setLineNumber(lineNumber);
 				astSetColor.addChild(astID);
@@ -458,7 +420,7 @@ public class SyntacticAnalyzer {
 		// Debe ser SETBASE
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setbase")) {
-
+				astSetBase = new AST();
 				astSetBase.setValue(word.getLexema());
 				astSetBase.setLineNumber(lineNumber);
 				return true;
@@ -477,19 +439,10 @@ public class SyntacticAnalyzer {
 				String inversa = convertToPolacaInversa(word.getLexema());
 				
 				// Se confecciona el AST de la expresion aritmetica
-				AST tmp = createExpressionAST(inversa, lineNumber);
-				astExpresion.setValue(word.getLexema());
-				astExpresion.setLineNumber(lineNumber);
+				astExpresion = new AST();
+				astExpresion = createAritmeticNode(inversa);
+				astSetHeight.addChild(astExpresion);
 				
-				System.out.println("Raiz ---> " + tmp.getValue());
-				System.out.println("Nodo 0 --->  " + tmp.getChild(0).getValue());
-				System.out.println("Nodo 1 --->  " + tmp.getChild(1).getValue());
-				System.out.println("Nodo 1.1 --->  " + tmp.getChild(1).getChild(0).getValue());
-				System.out.println("Nodo 1.2 --->  " + tmp.getChild(1).getChild(1).getValue());
-				
-				System.exit(0);
-				
-				astSetBase.addChild(astExpresion);
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -530,7 +483,7 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 5) {
 			if (word.getTipoToken().equals("id")) {
-
+				astID = new AST();
 				astID.setValue(word.getLexema());
 				astID.setLineNumber(lineNumber);
 				astSetBase.addChild(astID);
@@ -565,6 +518,7 @@ public class SyntacticAnalyzer {
 		// Debe ser SETHEIGHT
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setheight")) {
+				astSetHeight = new AST();
 				astSetHeight.setValue(word.getLexema());
 				astSetHeight.setLineNumber(lineNumber);
 				return true;
@@ -580,21 +534,12 @@ public class SyntacticAnalyzer {
 			if (word.getTipoToken().equals("expresion")) {
 				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
-
+				
 				// Se confecciona el AST de la expresion aritmetica
-				AST tmp = createExpressionAST(inversa, lineNumber);
-				astExpresion.setValue(word.getLexema());
-				astExpresion.setLineNumber(lineNumber);
-
-				System.out.println("Raiz ---> " + tmp.getValue());
-				System.out.println("Nodo 0 --->  " + tmp.getChild(0).getValue());
-				System.out.println("Nodo 1 --->  " + tmp.getChild(1).getValue());
-				System.out.println("Nodo 1.1 --->  " + tmp.getChild(1).getChild(0).getValue());
-				System.out.println("Nodo 1.2 --->  " + tmp.getChild(1).getChild(1).getValue());
-
-				System.exit(0);
-
-				astSetBase.addChild(astExpresion);
+				astExpresion = new AST();
+				astExpresion = createAritmeticNode(inversa);
+				astSetHeight.addChild(astExpresion);
+				
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -635,6 +580,7 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 5) {
 			if (word.getTipoToken().equals("id")) {
+				astID = new AST();
 				astID.setValue(word.getLexema());
 				astID.setLineNumber(lineNumber);
 				astSetHeight.addChild(astID);
@@ -664,12 +610,38 @@ public class SyntacticAnalyzer {
 		return false;
 	}
 
+	private void visitAST(AST ast) {
+		// Metodo que recorre el AST y va imprimiendo por pantalla
+		
+		// Imprimo al padre
+		System.out.println(ast.getValue());
+		
+		// Obtengo una lista de los hijos de la raiz
+		List <AST> listChildren=ast.listChildren();
+		
+		for (AST tmp: listChildren){				
+				// El hijo tiene hijos y por cada uno invoco de nuevo el metodo para imprimirlos
+				visitAST(tmp);
+		}
+	}
+	
+	/*private void showGuiones(Integer astIteratorNumber) {  ************** LA COMENTO DADO QUE TODAVIA NO LA ESTAMOS UTILIZANDO, LUEGO LA VAMOS A OPTIMIZAR Y UTILIZAR ****************
+		// Imprime los guiones que van a la izquierda del hijo, es solo un tema de formato 
+		System.out.print("\n");
+		
+		for (int i = 0; i < astIteratorNumber; i++){
+			// Tantos guiones como # de iteracion en la que estoy
+			System.out.print("-");
+		}
+		
+	}*/
+
 	private boolean checkOrderSetRadius(Token word, Integer wordNumber,
 			Integer lineNumber) {
 		// Debe ser RADIUS
 		if (wordNumber == 1) {
 			if (word.getTipoToken().equals("setradius")) {
-
+				astSetRadius = new AST();
 				astSetRadius.setValue(word.getLexema());
 				astSetRadius.setLineNumber(lineNumber);
 				return true;
@@ -686,23 +658,11 @@ public class SyntacticAnalyzer {
 				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
 				
-				// Se valida el orden que posee la operacion aritmetica
-				checkOrderArithmeticExpression(inversa);
-
 				// Se confecciona el AST de la expresion aritmetica
-				AST tmp = createExpressionAST(inversa, lineNumber);
-				astExpresion.setValue(word.getLexema());
-				astExpresion.setLineNumber(lineNumber);
-
-				System.out.println("Raiz ---> " + tmp.getValue());
-				System.out.println("Nodo 0 --->  " + tmp.getChild(0).getValue());
-				System.out.println("Nodo 1 --->  " + tmp.getChild(1).getValue());
-				System.out.println("Nodo 1.1 --->  " + tmp.getChild(1).getChild(0).getValue());
-				System.out.println("Nodo 1.2 --->  " + tmp.getChild(1).getChild(1).getValue());
-
-				System.exit(0);
-
-				astSetBase.addChild(astExpresion);
+				astExpresion = new AST();
+				astExpresion = createAritmeticNode(inversa);
+				astSetHeight.addChild(astExpresion);
+				
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -742,7 +702,7 @@ public class SyntacticAnalyzer {
 		// Debe ser ID
 		if (wordNumber == 5) {
 			if (word.getTipoToken().equals("id")) {
-
+				astID = new AST();
 				astID.setValue(word.getLexema());
 				astID.setLineNumber(lineNumber);
 				astSetRadius.addChild(astID);
@@ -772,19 +732,6 @@ public class SyntacticAnalyzer {
 		return false;
 	}
 
-	private void checkOrderArithmeticExpression(String inversa) {
-		/*String[] parts = inversa.split(" ");
-
-		// Se recorre parte por parte y se valida que el orden sea correcto
-		for (int i = 0; i < parts.length; i++) {
-			// Si o si debe ser un operador aritmetico ya que no puede empezar de otra manera
-			if((i==0)&&(parts[0].matches("[0-9]*"))){
-				
-				
-			}else{ }
-		}*/
-		
-	}
 
 	private void checkCommands(String lookahead, Integer words) {
 
@@ -865,6 +812,7 @@ public class SyntacticAnalyzer {
 			char caracter = infijo.charAt(i);
 			switch (caracter) {
 			case ')':
+				System.out.println("Push de ... " + caracter);
 				PilaTemp.push(caracter);
 				break;
 			case '+':
@@ -889,6 +837,7 @@ public class SyntacticAnalyzer {
 	}
 
 	public static int Jerarquia(char elemento) {
+		// Verifica la jerarquia
 		int res = 0;
 		switch (elemento) {
 		case ')':
@@ -913,70 +862,118 @@ public class SyntacticAnalyzer {
 	}
 
 	private String convertToPolacaInversa(String notation) {
-		// Este metodo pasa la operacion aritmetica a notacion polaca inversa
-		String tmpNotation = "";
+		// Se depura la expresion aritmetica 
+		   String expr = depurar(notation);
+		   String[] arrayInfix = expr.split(" ");
+		   
+	    // Se declaran de las pilas
+	    Stack < String > E = new Stack < String > (); //Pila entrada
+	    Stack < String > P = new Stack < String > (); //Pila temporal para operadores
+	    Stack < String > S = new Stack < String > (); //Pila salida
 
-		Pila p1 = disarmNotation(notation);
+	    // Añadir al array a la Pila de entrada (E)
+	    for (int i = arrayInfix.length - 1; i >= 0; i--) {
+	      E.push(arrayInfix[i]);
+	    }
 
-		// Se recorre la pila y a partir de eso se va concatenando para armar la notacion polaca inversa
-		while (p1.i > 0) {
-			tmpNotation += p1.pop();
-			tmpNotation += " ";
-		}
+	    try {
+	      // Algoritmo de conversion a polaca inversa
+	      while (!E.isEmpty()) {
+	        switch (inversa(E.peek())){
+	          case 1:
+	            P.push(E.pop());
+	            break;
+	          case 3:
+	          case 4:
+	            while(inversa(P.peek()) >= inversa(E.peek())) {
+	              S.push(P.pop());
+	            }
+	            P.push(E.pop());
+	            break; 
+	          case 2:
+	            while(!P.peek().equals("(")) {
+	              S.push(P.pop());
+	            }
+	            P.pop();
+	            E.pop();
+	            break; 
+	          default:
+	            S.push(E.pop()); 
+	        } 
+	      } 
+		 
+	      
+	      // Se reemplaza expr con el resultado de la inversa
+	      expr = S.toString().replaceAll("[\\]\\[,]", "");
+	     
+	    }catch(Exception ex){ 
+	        System.out.println("Error en la expresión aritmetica");
+	        System.err.println(ex);
+	      }
 		
-		return tmpNotation;
+	    return expr;
 	}
 
-	private AST createExpressionAST(String inversa, Integer lineNumber) {
-		// Este metodo crea el AST de una expresion aritmetica
-		AST expressionNodo1 = new AST();
-		AST expressionNodo2 = new AST();
-		AST expressionNodo3 = new AST();
+	private AST createAritmeticNode(String inversa) {
+		// Este metodo arma el AST de una expresion aritmetica
+		
+		// Se instancia la pila y ASTs a utilizar
+		Stack<AST> stack = new Stack<AST>();
+		AST leftValue = new AST();
+		AST rightValue = new AST();
+		AST node = new AST();
+		
+        for (char c: inversa.toCharArray()) {
+            if (c != ' ') {
+            	// Se crea el nodo actual (ast)
+            	node = new AST();
+            	node.setValue(Character.toString(c));
+               	
+                if ("+-*/".indexOf(c) != -1) { 
+                	// Se desapilan los hijos                	
+                	rightValue = stack.pop();
+                	leftValue = stack.pop(); 
+                	
+                	// Agregamos los AST hijos al AST padre 
+                	node.addChild(leftValue);
+                	node.addChild(rightValue);
+                }
+                stack.push(node);
+            }
+        }
+		
+        
+        stack.push(node);
+        return  stack.pop();
 
-		// 1) Se segmenta la expresion aritmetica por espacio (asi se obtiene caracter por caracter)
-		System.out.println("Operacion pasada a inversa  " + inversa);
-		String[] parts = inversa.split(" ");
-
-		// 2) Se recorre la expresion y cada vez que se detecta un operador se crea un nuevo NODO HIJO
-		for (int i = 0; i < parts.length; i++) {
-			if (i == 0) {
-				// Para la primer iteracion se contempla a la operacion inicial como nodo raiz
-				expressionNodo1.setValue(parts[i]);
-				expressionNodo1.setLineNumber(lineNumber);
-				//System.out.println("Iteracion if1 " + i + " " + expressionNodo1.getValue());
-			} else if ((parts[i].trim().equals("+")) || (parts[i].trim().equals("-")) || (parts[i].trim().equals("*")) || (parts[i].trim().equals("/"))) {
-				// Se detecta un operador, se crea un nuevo nodo
-				// ANTES SE VALIDA QUE puede ser que el nodo expressionNodo ya tenga hijos , asi que por las dudas se verifica eso y de ser asi se lo agrega a nodo raiz
-			
-				if (expressionNodo3.listChildren().size() > 0) {
-					// Significa que tiene hijos, es decir , ya paso por el IF de abajo
-					expressionNodo1.addChild(expressionNodo3);
-				}
-				
-				expressionNodo3 = new AST();
-				expressionNodo3.setValue(parts[i]);
-				expressionNodo3.setLineNumber(lineNumber);
-				//System.out.println("Iteracion if2 " + i + " "+ expressionNodo3.getValue());
-			} else {
-				// Se utiliza el nodo existente
-				expressionNodo2 = new AST();
-				expressionNodo2.setValue(parts[i]);
-				expressionNodo2.setLineNumber(lineNumber);
-
-				// Puede suceder que todavia nodo 3 no exista, en ese caso lo agrego a nodo 1
-				if (expressionNodo3.getValue().equals("")) {
-					expressionNodo1.addChild(expressionNodo2); 
-				} else {
-					expressionNodo3.addChild(expressionNodo2);
-				}
-
-				//System.out.println("Iteracion if3 " + i + " "+ expressionNodo2.getValue());
-			}
-		}
-
-		expressionNodo1.addChild(expressionNodo3);
-
-		return expressionNodo1;
-
-	}
+	} 
+	
+	  private static String depurar(String s) {
+		 // Se eliminan caracteres que "molestan" en la expresion aritmetica
+	    s = s.replaceAll("\\s+", ""); 
+	    s = "(" + s + ")";
+	    String simbols = "+-*/()";
+	    String str = "";
+	  
+	    //Deja espacios entre operadores
+	    for (int i = 0; i < s.length(); i++) {
+	      if (simbols.contains("" + s.charAt(i))) {
+	        str += " " + s.charAt(i) + " ";
+	      }else str += s.charAt(i);
+	    }
+	    return str.replaceAll("\\s+", " ").trim();
+	  }
+	  
+	 
+	  private static int inversa(String op) {
+		// Jerarquia de los operadores
+		int prf = 99;
+	    if (op.equals("^")) prf = 5;
+	    if (op.equals("*") || op.equals("/")) prf = 4;
+	    if (op.equals("+") || op.equals("-")) prf = 3;
+	    if (op.equals(")")) prf = 2;
+	    if (op.equals("(")) prf = 1;
+	    return prf;
+	  }
+	  
 }
