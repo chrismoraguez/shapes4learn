@@ -3,9 +3,6 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import javax.management.StringValueExp;
-
 import edu.maimonides.multimedia.shapes4learn.model.AST;
 import edu.maimonides.multimedia.shapes4learn.model.Pila;
 import edu.maimonides.multimedia.shapes4learn.model.Token;
@@ -55,7 +52,8 @@ public class SyntacticAnalyzer {
 				// No es fin de sentencia, se va reconstruyendo la sentencia
 				sentenceGrammar.add(token);
 			} else {
-				// Es fin de sentencia, se cierra la sentencia y se manda a analizar sintacticamente
+				// Es fin de sentencia, se cierra la sentencia y se manda a
+				// analizar sintacticamente
 				sentenceGrammar.add(token);
 				checkSentence(sentenceGrammar, lineNumber);
 				sentenceGrammar = new ArrayList<>();
@@ -68,9 +66,7 @@ public class SyntacticAnalyzer {
 
 		// Se recorre e imprime el AST
 		visitAST(nodoPrincipal);
-		
-	
-		
+
 		return nodoPrincipal;
 	}
 
@@ -113,12 +109,14 @@ public class SyntacticAnalyzer {
 			}
 
 			if (!validate) {
-				// Se detecto algun error en la sentencia, se finaliza el analisis sintactico de esa sentencia
+				// Se detecto algun error en la sentencia, se finaliza el
+				// analisis sintactico de esa sentencia
 				break;
 			}
 		}
 
-		// Dependiendo la accion ingresada por el usuario se valida que la cantidad de comandos sea la correcta
+		// Dependiendo la accion ingresada por el usuario se valida que la
+		// cantidad de comandos sea la correcta
 		if (validate) {
 			checkCommands(lookahead, wordNumber);
 		}
@@ -143,15 +141,17 @@ public class SyntacticAnalyzer {
 
 		// Debe ser EXPRESSION
 		if (wordNumber == 2) {
-			if (word.getTipoToken().equals("expresion")) {
-				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
+			if (word.getTipoToken().equals("expresion")
+					&& validarExpresion(word.getLexema())) {
+				// Se pasa la expresion a anotacion polaca inversa para luego
+				// poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
-				
+
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
 				astSetHeight.addChild(astExpresion);
-				
+
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -178,15 +178,17 @@ public class SyntacticAnalyzer {
 
 		// Debe ser EXPRESSION
 		if (wordNumber == 4) {
-			if (word.getTipoToken().equals("expresion")) {
-				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
+			if (word.getTipoToken().equals("expresion")
+					&& validarExpresion(word.getLexema())) {
+				// Se pasa la expresion a anotacion polaca inversa para luego
+				// poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
-				
+
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
 				astSetHeight.addChild(astExpresion);
-				
+
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -434,15 +436,17 @@ public class SyntacticAnalyzer {
 
 		// Debe ser EXPRESSION
 		if (wordNumber == 2) {
-			if (word.getTipoToken().equals("expresion")) {
-				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
+			if (word.getTipoToken().equals("expresion")
+					&& validarExpresion(word.getLexema())) {
+				// Se pasa la expresion a anotacion polaca inversa para luego
+				// poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
-				
+
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
 				astSetHeight.addChild(astExpresion);
-				
+
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -531,15 +535,17 @@ public class SyntacticAnalyzer {
 
 		// Debe ser EXPRESSION
 		if (wordNumber == 2) {
-			if (word.getTipoToken().equals("expresion")) {
-				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
+			if (word.getTipoToken().equals("expresion")
+					&& validarExpresion(word.getLexema())) {
+				// Se pasa la expresion a anotacion polaca inversa para luego
+				// poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
-				
+
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
 				astSetHeight.addChild(astExpresion);
-				
+
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -612,29 +618,31 @@ public class SyntacticAnalyzer {
 
 	private void visitAST(AST ast) {
 		// Metodo que recorre el AST y va imprimiendo por pantalla
-		
+
 		// Imprimo al padre
 		System.out.println(ast.getValue());
-		
+
 		// Obtengo una lista de los hijos de la raiz
-		List <AST> listChildren=ast.listChildren();
-		
-		for (AST tmp: listChildren){				
-				// El hijo tiene hijos y por cada uno invoco de nuevo el metodo para imprimirlos
-				visitAST(tmp);
+		List<AST> listChildren = ast.listChildren();
+
+		for (AST tmp : listChildren) {
+			// El hijo tiene hijos y por cada uno invoco de nuevo el metodo para
+			// imprimirlos
+			visitAST(tmp);
 		}
 	}
-	
-	/*private void showGuiones(Integer astIteratorNumber) {  ************** LA COMENTO DADO QUE TODAVIA NO LA ESTAMOS UTILIZANDO, LUEGO LA VAMOS A OPTIMIZAR Y UTILIZAR ****************
-		// Imprime los guiones que van a la izquierda del hijo, es solo un tema de formato 
-		System.out.print("\n");
-		
-		for (int i = 0; i < astIteratorNumber; i++){
-			// Tantos guiones como # de iteracion en la que estoy
-			System.out.print("-");
-		}
-		
-	}*/
+
+	/*
+	 * private void showGuiones(Integer astIteratorNumber) { ************** LA
+	 * COMENTO DADO QUE TODAVIA NO LA ESTAMOS UTILIZANDO, LUEGO LA VAMOS A
+	 * OPTIMIZAR Y UTILIZAR **************** // Imprime los guiones que van a la
+	 * izquierda del hijo, es solo un tema de formato System.out.print("\n");
+	 * 
+	 * for (int i = 0; i < astIteratorNumber; i++){ // Tantos guiones como # de
+	 * iteracion en la que estoy System.out.print("-"); }
+	 * 
+	 * }
+	 */
 
 	private boolean checkOrderSetRadius(Token word, Integer wordNumber,
 			Integer lineNumber) {
@@ -654,15 +662,17 @@ public class SyntacticAnalyzer {
 
 		// Debe ser EXPRESSION
 		if (wordNumber == 2) {
-			if (word.getTipoToken().equals("expresion")) {
-				// Se pasa la expresion a anotacion polaca inversa para luego poder trabajarla
+			if (word.getTipoToken().equals("expresion")
+					&& validarExpresion(word.getLexema())) {
+				// Se pasa la expresion a anotacion polaca inversa para luego
+				// poder trabajarla
 				String inversa = convertToPolacaInversa(word.getLexema());
-				
+
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
 				astSetHeight.addChild(astExpresion);
-				
+
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -731,7 +741,6 @@ public class SyntacticAnalyzer {
 		}
 		return false;
 	}
-
 
 	private void checkCommands(String lookahead, Integer words) {
 
@@ -805,38 +814,38 @@ public class SyntacticAnalyzer {
 	public static Pila disarmNotation(String infijo) {
 		infijo = '(' + infijo; // Agregamos al final del infijo un parenteris
 		int tamaño = infijo.length();
-		Pila PilaDefinitiva = new Pila(tamaño);
-		Pila PilaTemp = new Pila(tamaño);
-		PilaTemp.push(')'); // Agregamos a la pila temporal parenteris
+		Pila pilaDefinitiva = new Pila(tamaño);
+		Pila pilaTemp = new Pila(tamaño);
+		pilaTemp.push(')'); // Agregamos a la pila temporal parenteris
 		for (int i = tamaño - 1; i > -1; i--) {
 			char caracter = infijo.charAt(i);
 			switch (caracter) {
 			case ')':
 				System.out.println("Push de ... " + caracter);
-				PilaTemp.push(caracter);
+				pilaTemp.push(caracter);
 				break;
 			case '+':
 			case '-':
 			case '^':
 			case '*':
 			case '/':
-				while (Jerarquia(caracter) > Jerarquia(PilaTemp.nextPop()))
-					PilaDefinitiva.push(PilaTemp.pop());
-				PilaTemp.push(caracter);
+				while (jerarquia(caracter) > jerarquia(pilaTemp.nextPop()))
+					pilaDefinitiva.push(pilaTemp.pop());
+				pilaTemp.push(caracter);
 				break;
 			case '(':
-				while (PilaTemp.nextPop() != ')')
-					PilaDefinitiva.push(PilaTemp.pop());
-				PilaTemp.pop();
+				while (pilaTemp.nextPop() != ')')
+					pilaDefinitiva.push(pilaTemp.pop());
+				pilaTemp.pop();
 				break;
 			default:
-				PilaDefinitiva.push(caracter);
+				pilaDefinitiva.push(caracter);
 			}
 		}
-		return PilaDefinitiva;
+		return pilaDefinitiva;
 	}
 
-	public static int Jerarquia(char elemento) {
+	public static int jerarquia(char elemento) {
 		// Verifica la jerarquia
 		int res = 0;
 		switch (elemento) {
@@ -862,118 +871,234 @@ public class SyntacticAnalyzer {
 	}
 
 	private String convertToPolacaInversa(String notation) {
-		// Se depura la expresion aritmetica 
-		   String expr = depurar(notation);
-		   String[] arrayInfix = expr.split(" ");
-		   
-	    // Se declaran de las pilas
-	    Stack < String > E = new Stack < String > (); //Pila entrada
-	    Stack < String > P = new Stack < String > (); //Pila temporal para operadores
-	    Stack < String > S = new Stack < String > (); //Pila salida
+		// Se depura la expresion aritmetica
+		String expr = depurar(notation);
+		String[] arrayInfix = expr.split(" ");
 
-	    // Añadir al array a la Pila de entrada (E)
-	    for (int i = arrayInfix.length - 1; i >= 0; i--) {
-	      E.push(arrayInfix[i]);
-	    }
+		// Se declaran de las pilas
+		Stack<String> e = new Stack<String>(); // Pila entrada
+		Stack<String> p = new Stack<String>(); // Pila temporal para operadores
+		Stack<String> s = new Stack<String>(); // Pila salida
 
-	    try {
-	      // Algoritmo de conversion a polaca inversa
-	      while (!E.isEmpty()) {
-	        switch (inversa(E.peek())){
-	          case 1:
-	            P.push(E.pop());
-	            break;
-	          case 3:
-	          case 4:
-	            while(inversa(P.peek()) >= inversa(E.peek())) {
-	              S.push(P.pop());
-	            }
-	            P.push(E.pop());
-	            break; 
-	          case 2:
-	            while(!P.peek().equals("(")) {
-	              S.push(P.pop());
-	            }
-	            P.pop();
-	            E.pop();
-	            break; 
-	          default:
-	            S.push(E.pop()); 
-	        } 
-	      } 
-		 
-	      
-	      // Se reemplaza expr con el resultado de la inversa
-	      expr = S.toString().replaceAll("[\\]\\[,]", "");
-	     
-	    }catch(Exception ex){ 
-	        System.out.println("Error en la expresión aritmetica");
-	        System.err.println(ex);
-	      }
-		
-	    return expr;
+		// Añadir al array a la Pila de entrada (E)
+		for (int i = arrayInfix.length - 1; i >= 0; i--) {
+			e.push(arrayInfix[i]);
+		}
+
+		try {
+			// Algoritmo de conversion a polaca inversa
+			while (!e.isEmpty()) {
+				switch (inversa(e.peek())) {
+				case 1:
+					p.push(e.pop());
+					break;
+				case 3:
+				case 4:
+					while (inversa(p.peek()) >= inversa(e.peek())) {
+						s.push(p.pop());
+					}
+					p.push(e.pop());
+					break;
+				case 2:
+					while (!p.peek().equals("(")) {
+						s.push(p.pop());
+					}
+					p.pop();
+					e.pop();
+					break;
+				default:
+					s.push(e.pop());
+				}
+			}
+
+			// Se reemplaza expr con el resultado de la inversa
+			expr = s.toString().replaceAll("[\\]\\[,]", "");
+
+		} catch (Exception ex) {
+			System.out.println("Error en la expresión aritmetica");
+			System.err.println(ex);
+		}
+
+		return expr;
 	}
 
 	private AST createAritmeticNode(String inversa) {
 		// Este metodo arma el AST de una expresion aritmetica
-		
+
 		// Se instancia la pila y ASTs a utilizar
 		Stack<AST> stack = new Stack<AST>();
 		AST leftValue = new AST();
 		AST rightValue = new AST();
 		AST node = new AST();
-		
-        for (char c: inversa.toCharArray()) {
-            if (c != ' ') {
-            	// Se crea el nodo actual (ast)
-            	node = new AST();
-            	node.setValue(Character.toString(c));
-               	
-                if ("+-*/".indexOf(c) != -1) { 
-                	// Se desapilan los hijos                	
-                	rightValue = stack.pop();
-                	leftValue = stack.pop(); 
-                	
-                	// Agregamos los AST hijos al AST padre 
-                	node.addChild(leftValue);
-                	node.addChild(rightValue);
-                }
-                stack.push(node);
-            }
-        }
-		
-        
-        stack.push(node);
-        return  stack.pop();
 
-	} 
-	
-	  private static String depurar(String s) {
-		 // Se eliminan caracteres que "molestan" en la expresion aritmetica
-	    s = s.replaceAll("\\s+", ""); 
-	    s = "(" + s + ")";
-	    String simbols = "+-*/()";
-	    String str = "";
-	  
-	    //Deja espacios entre operadores
-	    for (int i = 0; i < s.length(); i++) {
-	      if (simbols.contains("" + s.charAt(i))) {
-	        str += " " + s.charAt(i) + " ";
-	      }else str += s.charAt(i);
-	    }
-	    return str.replaceAll("\\s+", " ").trim();
-	  }
-	  
-	 
-	  private static int inversa(String op) {
+		for (char c : inversa.toCharArray()) {
+			if (c != ' ') {
+				// Se crea el nodo actual (ast)
+				node = new AST();
+				node.setValue(Character.toString(c));
+
+				if ("+-*/".indexOf(c) != -1) {
+					// Se desapilan los hijos
+					rightValue = stack.pop();
+					leftValue = stack.pop();
+
+					// Agregamos los AST hijos al AST padre
+					node.addChild(leftValue);
+					node.addChild(rightValue);
+				}
+				stack.push(node);
+			}
+		}
+		stack.push(node);
+		return stack.pop();
+	}
+
+	private static String depurar(String s) {
+		// Se eliminan caracteres que "molestan" en la expresion aritmetica
+		s = s.replaceAll("\\s+", "");
+		s = "(" + s + ")";
+		String simbols = "+-*/()";
+		String str = "";
+
+		// Deja espacios entre operadores
+		for (int i = 0; i < s.length(); i++) {
+			if (simbols.contains("" + s.charAt(i))) {
+				str += " " + s.charAt(i) + " ";
+			} else
+				str += s.charAt(i);
+		}
+		return str.replaceAll("\\s+", " ").trim();
+	}
+
+	private static int inversa(String op) {
 		// Jerarquia de los operadores
 		int prf = 99;
-	    if (op.equals("^")) prf = 5;
-	    if (op.equals("*") || op.equals("/")) prf = 4;
-	    if (op.equals("+") || op.equals("-")) prf = 3;
-	    if (op.equals(")")) prf = 2;
-	    if (op.equals("(")) prf = 1;
-	    return prf;
-	  }
-	  
+		if (op.equals("^"))
+			prf = 5;
+		if (op.equals("*") || op.equals("/"))
+			prf = 4;
+		if (op.equals("+") || op.equals("-"))
+			prf = 3;
+		if (op.equals(")"))
+			prf = 2;
+		if (op.equals("("))
+			prf = 1;
+		return prf;
+	}
+
+	boolean validarExpresion(String cadena) {
+		Stack<String> stack = new Stack<String>();
+		int i = 0;
+		int estadoAux, estadoActual = 1;
+		String simbolo;
+
+		System.out.println("\nSe procede a la validación de la expresión:\n");
+
+		while (i < cadena.length()) {
+			simbolo = Character.toString(cadena.charAt(i));
+			estadoAux = estadoActual;
+			estadoActual = comprobarOperacion(simbolo, estadoAux, stack);
+			i++;
+		}
+
+		boolean pilaVacia = stack.empty();
+		try {
+			stack.pop();
+		} catch (Exception e) {
+
+		}
+
+		if ((pilaVacia) && (estadoActual == 2)) {
+			estadoActual++;
+		}
+
+		if ((esEstadoAceptacion(estadoActual) == 1)) {
+			System.out
+					.println("\n\t\t*****************************************\n");
+			System.out
+					.println("\t\t*                                       *\n");
+			System.out
+					.println("\t\t*        RESULTADO: Sarta CORRECTA      *\n");
+			System.out.println("\t\t*                                       *");
+			System.out
+					.println("\n\t\t*****************************************\n");
+			return true;
+		} else {
+			System.out
+					.println("\n\t\t*****************************************\n");
+			System.out
+					.println("\t\t*                                       *\n");
+			System.out
+					.println("\t\t*       RESULTADO: Sarta INCORRECTA     *\n");
+			System.out.println("\t\t*                                       *");
+			System.out
+					.println("\n\t\t*****************************************\n");
+			return false;
+		}
+	}
+
+	int comprobarOperacion(String simbolo, int estadoActual, Stack<String> pila) {
+		/* Se comprueba si la operación aritmética es válida */
+
+		boolean pilaVacia = pila.empty();
+		try {
+			pila.pop();
+		} catch (Exception e) {
+		}
+
+		switch (estadoActual) {
+		case 1: {
+			if ((simbolo.charAt(0) == 40) && (pilaVacia)) {
+				pila.push(simbolo);
+			} else if ((simbolo.charAt(0) == 40) && (!pilaVacia)) {
+				pila.push(simbolo);
+				pila.push(simbolo);
+			} else if (((simbolo.charAt(0) >= 48) && (simbolo.charAt(0) <= 57))
+					&& (!pilaVacia)) {
+				pila.push(simbolo);
+				estadoActual++;
+			} else if (((simbolo.charAt(0) >= 48) && (simbolo.charAt(0) <= 57))
+					&& (pilaVacia)) {
+				estadoActual++;
+			} else {
+				estadoActual = 0; /* Falla la sarta */
+			}
+		}
+			break;
+
+		case 2: {
+			if ((simbolo.charAt(0) == 41) && (!pilaVacia)) {
+				/* Se mira la pila y paso al siguiente signo */
+			} else if ((simbolo.charAt(0) == 41) && (pilaVacia)) {
+				estadoActual = 0; /* Falla la sarta */
+			} else if (((42 == simbolo.charAt(0)) || (43 == simbolo.charAt(0))
+					|| (45 == simbolo.charAt(0)) || (47 == simbolo.charAt(0)))
+					&& (pilaVacia)) {
+				estadoActual--;
+			} else if (((42 == simbolo.charAt(0)) || (43 == simbolo.charAt(0))
+					|| (45 == simbolo.charAt(0)) || (47 == simbolo.charAt(0)))
+					&& (!pilaVacia)) {
+				pila.push(simbolo);
+				estadoActual--;
+			}
+		}
+			break;
+		}
+		return estadoActual;
+	}
+
+	int esEstadoAceptacion(int estadoActual) {
+		/*
+		 * Se verifica si el estado actual es estado de aceptación y se termina
+		 * de comprobar la operación aritmética
+		 */
+
+		int estadoAceptacion = 3;
+
+		if (estadoAceptacion == estadoActual) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 }
