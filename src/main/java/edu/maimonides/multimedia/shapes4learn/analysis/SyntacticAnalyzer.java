@@ -60,6 +60,8 @@ public class SyntacticAnalyzer {
 			}
 		}
 		// Se recorre e imprime el AST
+		System.out
+				.println("---------------------------Impresión AST-----------------------------");
 		visitAST(nodoPrincipal);
 
 		return nodoPrincipal;
@@ -114,6 +116,44 @@ public class SyntacticAnalyzer {
 		// cantidad de comandos sea la correcta
 		if (validate) {
 			checkCommands(lookahead, wordNumber);
+		}
+	}
+
+	private void visitAST(AST ast) {
+		// Metodo que recorre el AST y va imprimiendo por pantalla
+
+		if (ast.getValue().equals("create") || ast.getValue().equals("setcolor")
+				|| ast.getValue().equals("setbase")
+				|| ast.getValue().equals("setheight")
+				|| ast.getValue().equals("setposition")
+				|| ast.getValue().equals("setradius")) {
+			System.out
+					.println("Representación árbol: " + ast.getValue() + "\n");
+		}
+		// Imprimo al padre
+		System.out.println(ast.getValue());
+
+		// Obtengo una lista de los hijos de la raiz
+		List<AST> listChildren = ast.listChildren();
+
+		for (AST tmp : listChildren) {
+			// El hijo tiene hijos y por cada uno invoco de nuevo el metodo para
+			// imprimirlos
+			showGuiones(astIteratorNumber);
+			astIteratorNumber++;
+			visitAST(tmp);
+		}
+		astIteratorNumber--;
+	}
+
+	private void showGuiones(Integer astIteratorNumber) {
+		// Imprime los guiones que van a la izquierda del hijo, es solo un tema
+		// de formato
+		System.out.print("\n");
+
+		for (int i = 0; i < astIteratorNumber; i++) {
+			// Tantos guiones como # de iteracion en la que estoy
+			System.out.print("-");
 		}
 	}
 
@@ -512,36 +552,6 @@ public class SyntacticAnalyzer {
 		return false;
 	}
 
-	private void visitAST(AST ast) {
-		// Metodo que recorre el AST y va imprimiendo por pantalla
-
-		// Imprimo al padre
-		System.out.println(ast.getValue());
-
-		// Obtengo una lista de los hijos de la raiz
-		List<AST> listChildren = ast.listChildren();
-
-		for (AST tmp : listChildren) {
-			// El hijo tiene hijos y por cada uno invoco de nuevo el metodo para
-			// imprimirlos
-			showGuiones(astIteratorNumber);
-			astIteratorNumber++;
-			visitAST(tmp);
-		}
-		astIteratorNumber--;
-	}
-
-	private void showGuiones(Integer astIteratorNumber) {
-		// Imprime los guiones que van a la izquierda del hijo, es solo un tema
-		// de formato
-		System.out.print("\n");
-
-		for (int i = 0; i < astIteratorNumber; i++) {
-			// Tantos guiones como # de iteracion en la que estoy
-			System.out.print("-");
-		}
-	}
-
 	private boolean checkOrderSetHeight(Token word, Integer wordNumber,
 			Integer lineNumber) {
 		// Debe ser SETHEIGHT
@@ -931,7 +941,7 @@ public class SyntacticAnalyzer {
 		int estadoAux, estadoActual = 1;
 		String simbolo;
 
-		System.out.println("\nSe procede a la validación de la expresión:\n");
+		// System.out.println("Se procede a la validación de la expresión:");
 
 		while (i < cadena.length()) {
 			simbolo = Character.toString(cadena.charAt(i));
@@ -952,10 +962,10 @@ public class SyntacticAnalyzer {
 		}
 
 		if ((esEstadoAceptacion(estadoActual) == 1)) {
-			System.out.println("\t\t* RESULTADO: Expresión Válida *\n");
+			// System.out.println("La expresión aritmética ingresada es válida\n");
 			return true;
 		} else {
-			System.out.println("\t\t* RESULTADO: Expresión Inválida *\n");
+			// System.out.println("La expresión aritmética ingresada es inválida\n");
 			return false;
 		}
 	}
