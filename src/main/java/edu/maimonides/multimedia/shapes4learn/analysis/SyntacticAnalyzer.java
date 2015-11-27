@@ -512,6 +512,36 @@ public class SyntacticAnalyzer {
 		return false;
 	}
 
+	private void visitAST(AST ast) {
+		// Metodo que recorre el AST y va imprimiendo por pantalla
+
+		// Imprimo al padre
+		System.out.println(ast.getValue());
+
+		// Obtengo una lista de los hijos de la raiz
+		List<AST> listChildren = ast.listChildren();
+
+		for (AST tmp : listChildren) {
+			// El hijo tiene hijos y por cada uno invoco de nuevo el metodo para
+			// imprimirlos
+			showGuiones(astIteratorNumber);
+			astIteratorNumber++;
+			visitAST(tmp);
+		}
+		astIteratorNumber--;
+	}
+
+	private void showGuiones(Integer astIteratorNumber) {
+		// Imprime los guiones que van a la izquierda del hijo, es solo un tema
+		// de formato
+		System.out.print("\n");
+
+		for (int i = 0; i < astIteratorNumber; i++) {
+			// Tantos guiones como # de iteracion en la que estoy
+			System.out.print("-");
+		}
+	}
+
 	private boolean checkOrderSetHeight(Token word, Integer wordNumber,
 			Integer lineNumber) {
 		// Debe ser SETHEIGHT
@@ -610,34 +640,6 @@ public class SyntacticAnalyzer {
 		}
 		return false;
 	}
-
-	private void visitAST(AST ast) {
-		// Metodo que recorre el AST y va imprimiendo por pantalla
-
-		// Imprimo al padre
-		System.out.println(ast.getValue());
-
-		// Obtengo una lista de los hijos de la raiz
-		List<AST> listChildren = ast.listChildren();
-
-		for (AST tmp : listChildren) {
-			// El hijo tiene hijos y por cada uno invoco de nuevo el metodo para
-			// imprimirlos
-			visitAST(tmp);
-		}
-	}
-
-	/*
-	 * private void showGuiones(Integer astIteratorNumber) { ************** LA
-	 * COMENTO DADO QUE TODAVIA NO LA ESTAMOS UTILIZANDO, LUEGO LA VAMOS A
-	 * OPTIMIZAR Y UTILIZAR **************** // Imprime los guiones que van a la
-	 * izquierda del hijo, es solo un tema de formato System.out.print("\n");
-	 * 
-	 * for (int i = 0; i < astIteratorNumber; i++){ // Tantos guiones como # de
-	 * iteracion en la que estoy System.out.print("-"); }
-	 * 
-	 * }
-	 */
 
 	private boolean checkOrderSetRadius(Token word, Integer wordNumber,
 			Integer lineNumber) {

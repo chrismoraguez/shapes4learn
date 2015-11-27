@@ -1,9 +1,12 @@
 package edu.maimonides.multimedia.shapes4learn;
 
 import edu.maimonides.multimedia.shapes4learn.analysis.LexicalAnalyzer;
+import edu.maimonides.multimedia.shapes4learn.analysis.SemanticAnalyzer;
+import edu.maimonides.multimedia.shapes4learn.analysis.SemanticException;
 import edu.maimonides.multimedia.shapes4learn.analysis.SyntacticAnalyzer;
 import edu.maimonides.multimedia.shapes4learn.analysis.SyntacticException;
 import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
+import edu.maimonides.multimedia.shapes4learn.model.AST;
 import edu.maimonides.multimedia.shapes4learn.model.Token;
 
 import java.awt.BorderLayout;
@@ -39,7 +42,7 @@ public class Launcher {
 		JButton boton;
 
 		JFrame ventana = new JFrame("Shapes4Learn");
-		ventana.setTitle("Analizador Léxico/Sintáctico");
+		ventana.setTitle("Analizador Léxico/Sintáctico/Semántico");
 
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setBackground(Color.GRAY);
@@ -80,11 +83,17 @@ public class Launcher {
 
 				LexicalAnalyzer analizadorLexico = new LexicalAnalyzer();
 				SyntacticAnalyzer analizadorSintactico = new SyntacticAnalyzer();
+				SemanticAnalyzer analizadorSemantico = new SemanticAnalyzer();
+				AST ast = new AST();
+
 				try {
 					listaTokens.addAll(analizadorLexico.interpret(texto, null));
 					try {
-						analizadorSintactico.analyze(listaTokens);
+						ast = analizadorSintactico.analyze(listaTokens);
+						analizadorSemantico.analyze(ast);
 					} catch (SyntacticException e) {
+						e.printStackTrace();
+					} catch (SemanticException e) {
 						e.printStackTrace();
 					}
 				} catch (CodeException e) {
