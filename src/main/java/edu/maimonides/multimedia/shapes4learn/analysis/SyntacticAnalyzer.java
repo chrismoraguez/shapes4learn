@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import edu.maimonides.multimedia.shapes4learn.model.AST;
-import edu.maimonides.multimedia.shapes4learn.model.Pila;
 import edu.maimonides.multimedia.shapes4learn.model.Token;
 
 /**
@@ -60,10 +59,6 @@ public class SyntacticAnalyzer {
 				lineNumber++;
 			}
 		}
-
-		System.out.println("Cantidad de hijos: "
-				+ nodoPrincipal.listChildren().size());
-
 		// Se recorre e imprime el AST
 		visitAST(nodoPrincipal);
 
@@ -150,14 +145,14 @@ public class SyntacticAnalyzer {
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
-				astSetHeight.addChild(astExpresion);
+				astSetPosition.addChild(astExpresion);
 
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
 				System.out
-						.println("Error: Se esperaba palabra del tipo EXPRESSION");
+						.println("Error: Se esperaba palabra del tipo EXPRESSION/Expresión Inválida");
 				System.out.println();
 				return false;
 			}
@@ -187,14 +182,14 @@ public class SyntacticAnalyzer {
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
-				astSetHeight.addChild(astExpresion);
+				astSetPosition.addChild(astExpresion);
 
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
 				System.out
-						.println("Error: Se esperaba palabra del tipo EXPRESSION");
+						.println("Error: Se esperaba palabra del tipo EXPRESSION/Expresión Inválida");
 				System.out.println();
 				return false;
 			}
@@ -445,14 +440,14 @@ public class SyntacticAnalyzer {
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
-				astSetHeight.addChild(astExpresion);
+				astSetBase.addChild(astExpresion);
 
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
 				System.out
-						.println("Error: Se esperaba palabra del tipo EXPRESSION");
+						.println("Error: Se esperaba palabra del tipo EXPRESSION/Expresión Inválida");
 				System.out.println();
 				return false;
 			}
@@ -551,7 +546,7 @@ public class SyntacticAnalyzer {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
 				System.out
-						.println("Error: Se esperaba palabra del tipo EXPRESION");
+						.println("Error: Se esperaba palabra del tipo EXPRESSION/Expresión Inválida");
 				System.out.println();
 				return false;
 			}
@@ -671,13 +666,14 @@ public class SyntacticAnalyzer {
 				// Se confecciona el AST de la expresion aritmetica
 				astExpresion = new AST();
 				astExpresion = createAritmeticNode(inversa);
-				astSetHeight.addChild(astExpresion);
+				astSetRadius.addChild(astExpresion);
 
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
-				System.out.println("Error: Se esperaba palabra del tipo SHAPE");
+				System.out
+						.println("Error: Se esperaba palabra del tipo EXPRESSION/Expresión Inválida");
 				System.out.println();
 				return false;
 			}
@@ -809,65 +805,6 @@ public class SyntacticAnalyzer {
 			System.out
 					.println("Error: La cantidad de Comandos recibidos es inferior a la esperada para SETPOSITION \n");
 		}
-	}
-
-	public static Pila disarmNotation(String infijo) {
-		infijo = '(' + infijo; // Agregamos al final del infijo un parenteris
-		int tamaño = infijo.length();
-		Pila pilaDefinitiva = new Pila(tamaño);
-		Pila pilaTemp = new Pila(tamaño);
-		pilaTemp.push(')'); // Agregamos a la pila temporal parenteris
-		for (int i = tamaño - 1; i > -1; i--) {
-			char caracter = infijo.charAt(i);
-			switch (caracter) {
-			case ')':
-				System.out.println("Push de ... " + caracter);
-				pilaTemp.push(caracter);
-				break;
-			case '+':
-			case '-':
-			case '^':
-			case '*':
-			case '/':
-				while (jerarquia(caracter) > jerarquia(pilaTemp.nextPop()))
-					pilaDefinitiva.push(pilaTemp.pop());
-				pilaTemp.push(caracter);
-				break;
-			case '(':
-				while (pilaTemp.nextPop() != ')')
-					pilaDefinitiva.push(pilaTemp.pop());
-				pilaTemp.pop();
-				break;
-			default:
-				pilaDefinitiva.push(caracter);
-			}
-		}
-		return pilaDefinitiva;
-	}
-
-	public static int jerarquia(char elemento) {
-		// Verifica la jerarquia
-		int res = 0;
-		switch (elemento) {
-		case ')':
-			res = 5;
-			break;
-		case '^':
-			res = 4;
-			break;
-		case '*':
-		case '/':
-			res = 3;
-			break;
-		case '+':
-		case '-':
-			res = 2;
-			break;
-		case '(':
-			res = 1;
-			break;
-		}
-		return res;
 	}
 
 	private String convertToPolacaInversa(String notation) {
@@ -1013,26 +950,10 @@ public class SyntacticAnalyzer {
 		}
 
 		if ((esEstadoAceptacion(estadoActual) == 1)) {
-			System.out
-					.println("\n\t\t*****************************************\n");
-			System.out
-					.println("\t\t*                                       *\n");
-			System.out
-					.println("\t\t*        RESULTADO: Sarta CORRECTA      *\n");
-			System.out.println("\t\t*                                       *");
-			System.out
-					.println("\n\t\t*****************************************\n");
+			System.out.println("\t\t* RESULTADO: Expresión Válida *\n");
 			return true;
 		} else {
-			System.out
-					.println("\n\t\t*****************************************\n");
-			System.out
-					.println("\t\t*                                       *\n");
-			System.out
-					.println("\t\t*       RESULTADO: Sarta INCORRECTA     *\n");
-			System.out.println("\t\t*                                       *");
-			System.out
-					.println("\n\t\t*****************************************\n");
+			System.out.println("\t\t* RESULTADO: Expresión Inválida *\n");
 			return false;
 		}
 	}

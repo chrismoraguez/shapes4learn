@@ -39,7 +39,7 @@ public class Launcher {
 		JButton boton;
 
 		JFrame ventana = new JFrame("Shapes4Learn");
-		ventana.setTitle("Analizador Léxico");
+		ventana.setTitle("Analizador Léxico/Sintáctico");
 
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setBackground(Color.GRAY);
