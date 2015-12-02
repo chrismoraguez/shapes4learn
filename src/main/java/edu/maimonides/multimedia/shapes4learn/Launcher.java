@@ -90,7 +90,9 @@ public class Launcher {
 					listaTokens.addAll(analizadorLexico.interpret(texto, null));
 					try {
 						ast = analizadorSintactico.analyze(listaTokens);
-						analizadorSemantico.analyze(ast);
+						if (!ast.listChildren().isEmpty()) {
+							analizadorSemantico.analyze(ast);
+						}
 					} catch (SyntacticException e) {
 						e.printStackTrace();
 					} catch (SemanticException e) {

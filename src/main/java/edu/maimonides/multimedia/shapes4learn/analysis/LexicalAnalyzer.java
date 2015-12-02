@@ -49,7 +49,7 @@ public class LexicalAnalyzer implements Interpreter {
 		String setPosition = "\\b(setposition)\\b";
 		Pattern PatronSetPosition = Pattern.compile(setPosition);
 
-		String forma = "\\b(?:shape|rectangle|circle)\\b";
+		String forma = "\\b(?:rectangle|circle)\\b";
 		Pattern PatronForma = Pattern.compile(forma);
 
 		String colorDef = "#[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]";
@@ -60,6 +60,9 @@ public class LexicalAnalyzer implements Interpreter {
 
 		String in = "^in$";
 		Pattern PatronIn = Pattern.compile(in);
+
+		String shape = "^shape$";
+		Pattern PatronShape = Pattern.compile(shape);
 
 		String id = "^[a-zA-Z]+$";
 		Pattern PatronId = Pattern.compile(id);
@@ -249,6 +252,19 @@ public class LexicalAnalyzer implements Interpreter {
 				tokenEncontrado = true;
 			}
 
+			Matcher matcherShape = PatronShape.matcher(tokenActual);
+			if (!tokenEncontrado && matcherShape.matches() && !lexNoValido) {
+				System.out.println("Token: Shape - Lexema: " + tokenActual);
+
+				token = new Token();
+				token.setTipoToken("shape");
+				token.setLexema(tokenActual);
+				token.setValidez(true);
+				tokens.add(token);
+
+				tokenEncontrado = true;
+			}
+
 			Matcher matcherId = PatronId.matcher(tokenActual);
 			if (!tokenEncontrado && matcherId.matches() && !lexNoValido) {
 				System.out.println("Token: ID - Lexema: " + tokenActual);
@@ -301,6 +317,9 @@ public class LexicalAnalyzer implements Interpreter {
 		}
 
 		if (huboErrores) {
+
+			// Deberia haber una variable global que regule la continuacion o no
+			// del analisis
 			System.out.println("El analizador léxico ha encontrado errores.");
 		}
 

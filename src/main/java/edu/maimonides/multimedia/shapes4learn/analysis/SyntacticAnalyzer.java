@@ -35,6 +35,7 @@ public class SyntacticAnalyzer {
 	public AST astSetRadius = new AST();
 	public AST astSetPosition = new AST();
 	public AST astExpresion2 = new AST();
+	public boolean continuo = true;
 
 	public AST analyze(List<Token> tokens) throws SyntacticException {
 
@@ -44,30 +45,46 @@ public class SyntacticAnalyzer {
 		System.out.println("Análisis Sintáctico: \n");
 
 		for (Token token : tokens) {
+
 			tipoToken = token.getTipoToken();
 
-			// Se valida que el token no indique fin de sentencia
-			if (!tipoToken.equals("fin de sentencia")) {
-				// No es fin de sentencia, se va reconstruyendo la sentencia
-				sentenceGrammar.add(token);
-			} else {
-				// Es fin de sentencia, se cierra la sentencia y se manda a
-				// analizar sintacticamente
-				sentenceGrammar.add(token);
-				checkSentence(sentenceGrammar, lineNumber);
-				sentenceGrammar = new ArrayList<>();
-				lineNumber++;
+			if (continuo) {
+				// Se valida que el token no indique fin de sentencia
+				if (!tipoToken.equals("fin de sentencia")
+						&& (!tokens.isEmpty())) {
+					// No es fin de sentencia, se va reconstruyendo la
+					// sentencia
+					sentenceGrammar.add(token);
+				} else {
+					// Es fin de sentencia, se cierra la sentencia y se
+					// manda a analizar sintacticamente
+					sentenceGrammar.add(token);
+					continuo = checkSentence(sentenceGrammar, lineNumber);
+					sentenceGrammar = new ArrayList<>();
+					lineNumber++;
+				}
 			}
 		}
-		// Se recorre e imprime el AST
-		System.out
-				.println("---------------------------Impresión AST-----------------------------");
-		visitAST(nodoPrincipal);
 
-		return nodoPrincipal;
+		if (!tipoToken.equals("fin de sentencia")) {
+			// Para casos en los cuales no se hayan finalizado la
+			// sentencia correctamente
+			continuo = checkSentence(sentenceGrammar, lineNumber);
+			sentenceGrammar = new ArrayList<>();
+		}
+
+		// Se recorre e imprime el AST
+		if (continuo) {
+			System.out
+					.println("---------------------------Impresión AST-----------------------------");
+			visitAST(nodoPrincipal);
+			return nodoPrincipal;
+		} else {
+			return new AST();
+		}
 	}
 
-	private void checkSentence(List<Token> sentences, Integer lineNumber) {
+	private boolean checkSentence(List<Token> sentences, Integer lineNumber) {
 		// Se analiza sintácticamente cada sentencia recibida
 		String lookahead = sentences.get(0).getTipoToken();
 		Integer wordNumber = 0;
@@ -108,7 +125,7 @@ public class SyntacticAnalyzer {
 			if (!validate) {
 				// Se detecto algun error en la sentencia, se finaliza el
 				// analisis sintactico de esa sentencia
-				break;
+				return false;
 			}
 		}
 
@@ -117,12 +134,14 @@ public class SyntacticAnalyzer {
 		if (validate) {
 			checkCommands(lookahead, wordNumber);
 		}
+		return true;
 	}
 
 	private void visitAST(AST ast) {
 		// Metodo que recorre el AST y va imprimiendo por pantalla
 
-		if (ast.getValue().equals("create") || ast.getValue().equals("setcolor")
+		if (ast.getValue().equals("create")
+				|| ast.getValue().equals("setcolor")
 				|| ast.getValue().equals("setbase")
 				|| ast.getValue().equals("setheight")
 				|| ast.getValue().equals("setposition")
@@ -249,7 +268,7 @@ public class SyntacticAnalyzer {
 
 		// Debe ser SHAPE
 		if (wordNumber == 6) {
-			if (word.getTipoToken().equals("forma")) {
+			if (word.getTipoToken().equals("shape")) {
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
@@ -310,7 +329,7 @@ public class SyntacticAnalyzer {
 			}
 		}
 
-		// Debe ser SHAPE
+		// Debe ser FORMA
 		if (wordNumber == 2) {
 			if (word.getTipoToken().equals("forma")) {
 				astForma = new AST();
@@ -321,7 +340,7 @@ public class SyntacticAnalyzer {
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
-				System.out.println("Error: Se esperaba palabra del tipo SHAPE");
+				System.out.println("Error: Se esperaba palabra del tipo FORMA");
 				System.out.println();
 				return false;
 			}
@@ -408,12 +427,12 @@ public class SyntacticAnalyzer {
 
 		// Debe ser SHAPE
 		if (wordNumber == 4) {
-			if (word.getTipoToken().equals("forma")) {
+			if (word.getTipoToken().equals("shape")) {
 				return true;
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
-				System.out.println("Error: Se esperaba fin de sentencia ;");
+				System.out.println("Error: Se esperaba palabra del tipo SHAPE");
 				System.out.println();
 				return false;
 			}
@@ -711,7 +730,7 @@ public class SyntacticAnalyzer {
 			} else {
 				System.out.println("Se ha detectado un error en la línea #"
 						+ lineNumber + ", palabra #" + wordNumber);
-				System.out.println("Error: Se esperaba la palabra RECTANGLE");
+				System.out.println("Error: Se esperaba la palabra CIRCLE");
 				System.out.println();
 				return false;
 			}
