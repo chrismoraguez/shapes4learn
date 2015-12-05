@@ -1001,16 +1001,20 @@ public class SyntacticAnalyzer {
 		switch (estadoActual) {
 		case 1: {
 			if ((simbolo.charAt(0) == 40) && (pilaVacia)) {
+				/* Se valida ingreso de "(" con pila vacia */
 				pila.push(simbolo);
 			} else if ((simbolo.charAt(0) == 40) && (!pilaVacia)) {
+				/* Se valida ingreso de "(" con pila no vacia */
 				pila.push(simbolo);
 				pila.push(simbolo);
 			} else if (((simbolo.charAt(0) >= 48) && (simbolo.charAt(0) <= 57))
 					&& (!pilaVacia)) {
+				/* Se valida ingreso de numeros del 0 al 9 con pila no vacia */
 				pila.push(simbolo);
 				estadoActual++;
 			} else if (((simbolo.charAt(0) >= 48) && (simbolo.charAt(0) <= 57))
 					&& (pilaVacia)) {
+				/* Se valida ingreso de numeros del 0 al 9 con pila vacia */
 				estadoActual++;
 			} else {
 				estadoActual = 0; /* Falla la sarta */
@@ -1019,17 +1023,21 @@ public class SyntacticAnalyzer {
 			break;
 
 		case 2: {
-			if ((simbolo.charAt(0) == 41) && (!pilaVacia)) {
+			if ((simbolo.charAt(0) == 41)
+					|| ((simbolo.charAt(0) >= 48) && (simbolo.charAt(0) <= 57))
+					&& (!pilaVacia)) {
 				/* Se mira la pila y paso al siguiente signo */
 			} else if ((simbolo.charAt(0) == 41) && (pilaVacia)) {
 				estadoActual = 0; /* Falla la sarta */
 			} else if (((42 == simbolo.charAt(0)) || (43 == simbolo.charAt(0))
 					|| (45 == simbolo.charAt(0)) || (47 == simbolo.charAt(0)))
 					&& (pilaVacia)) {
+				/* Se valida ingreso de operadores con pila vacia */
 				estadoActual--;
 			} else if (((42 == simbolo.charAt(0)) || (43 == simbolo.charAt(0))
 					|| (45 == simbolo.charAt(0)) || (47 == simbolo.charAt(0)))
 					&& (!pilaVacia)) {
+				/* Se valida ingreso de operadores con pila no vacia */
 				pila.push(simbolo);
 				estadoActual--;
 			}
