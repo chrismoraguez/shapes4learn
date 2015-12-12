@@ -3,7 +3,6 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import edu.maimonides.multimedia.shapes4learn.model.AST;
 
 /**
@@ -80,20 +79,20 @@ public class SemanticAnalyzer {
 		// ésto, arroja error. Si no, reemplazar el resultado en el AST.
 		// En este caso, son dos expresiones a verificar.
 
-		// 1- Se valida si existe el ID en la lista de IDs existentes.
-		// Si existe, debe arrojar error y, si no existe, se agrega
+		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
-			if (id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
-				// ID EXISTENTE, se imprime el error y se devuelve false
+			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
+				// ID INEXISTENTE, se imprime el error y se devuelve true
 				System.out.println("Se ha detectado un error en la linea #"
-						+ lineNumber + " el ID "
-						+ astTemp.getChild(1).getValue() + " ya existe.");
+						+ lineNumber + ": el ID "
+						+ astTemp.getChild(1).getValue() + " no existe.");
 				return true;
 			}
 		}
 
 		System.out.println("La semantica de la linea #" + lineNumber
-				+ "es correcta.");
+				+ " es correcta.");
 		return false;
 	}
 
@@ -102,148 +101,87 @@ public class SemanticAnalyzer {
 		// Chequeo si la expresión es igual o menor a cero, si pasa ésto, arroja
 		// error. Si no, reemplazar el resultado en el AST.
 
-		// 1- Se valida si existe el ID en la lista de IDs existentes.
-		// Si existe, debe arrojar error y, si no existe, se agrega
+		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
-			if (id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
-				// ID EXISTENTE, se imprime el error y se devuelve false
+			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
+				// ID INEXISTENTE, se imprime el error y se devuelve true
 				System.out.println("Se ha detectado un error en la linea #"
-						+ lineNumber + " el ID "
-						+ astTemp.getChild(1).getValue() + " ya existe.");
+						+ lineNumber + ": el ID "
+						+ astTemp.getChild(1).getValue() + " no existe.");
 				return true;
 			}
 		}
 
 		System.out.println("La semantica de la linea #" + lineNumber
-				+ "es correcta.");
+				+ " es correcta.");
 		return false;
 	}
 
 	private boolean checkSemanticSetHeight(AST astTemp, List<String> idList,
 			Integer lineNumber) {
-		// 1- Se valida si existe el ID en la lista de IDs existentes.
-		// Si existe, debe arrojar error y, si no existe, se agrega
+		// Chequeo si la expresión es igual o menor a cero, si pasa ésto, arroja
+		// error. Si no, reemplazar el resultado en el AST.
+
+		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
-			if (id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
-				// ID EXISTENTE, se imprime el error y se devuelve false
+			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
+				// ID INEXISTENTE, se imprime el error y se devuelve true
 				System.out.println("Se ha detectado un error en la linea #"
-						+ lineNumber + " el ID "
-						+ astTemp.getChild(1).getValue() + " ya existe.");
+						+ lineNumber + ": el ID "
+						+ astTemp.getChild(1).getValue() + " no existe.");
 				return true;
 			}
 		}
 
 		System.out.println("La semantica de la linea #" + lineNumber
-				+ "es correcta.");
+				+ " es correcta.");
 		return false;
 	}
-  
+
 	private boolean checkSemanticSetBase(AST astTemp, List<String> idList,
 			Integer lineNumber) {
+		// Chequeo si la expresión es igual o menor a cero, si pasa ésto, arroja
+		// error. Si no, reemplazar el resultado en el AST.
+
 		// 1- Se recorre el AST de la EXPRESSION
 		visitAST(astTemp.getChild(0));
 
 		// 2- Se pasa de polaca a polaca inversa
-		//postfixNotation = convertNotation(infixNotation);
+		// postfixNotation = convertNotation(infixNotation);
 
 		// 3- Se revuelve la EXPRESSION
 		// System.out.println("Polaca " + polacaNotation);
 		resolveExpression(postfixNotation.trim());
 
-		// 3- Se valida si existe el ID en la lista de IDs existentes.
-		// Si existe, debe arrojar error y, si no existe, se agrega
+		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
-			if (id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
-				// ID EXISTENTE, se imprime el error y se devuelve false
+			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
+				// ID INEXISTENTE, se imprime el error y se devuelve true
 				System.out.println("Se ha detectado un error en la linea #"
-						+ lineNumber + " el ID "
-						+ astTemp.getChild(1).getValue() + " ya existe.");
+						+ lineNumber + ": el ID "
+						+ astTemp.getChild(1).getValue() + " no existe.");
 				return true;
 			}
 		}
 
 		System.out.println("La semantica de la linea #" + lineNumber
-				+ "es correcta.");
+				+ " es correcta.");
 		return false;
 	}
-
-	/*private String convertNotation(String infixNotation) {
-		infixNotation = infixNotation.replace(" ","");
-		System.out.println("imprimo infixNotation " + infixNotation );
-		String expr = depurar(infixNotation);
-		System.out.println("imprimo infixNotation 2 " + infixNotation );
-		String[] arrayInfix = expr.split(" ");
-
-		// Declaración de las pilas
-		Stack<String> E = new Stack<String>(); // Pila entrada
-		Stack<String> P = new Stack<String>(); // Pila temporal para operadores
-		Stack<String> S = new Stack<String>(); // Pila salida
-
-		// Añadir la array a la Pila de entrada (E)
-		for (int i = arrayInfix.length - 1; i >= 0; i--) {
-			System.out.println("Valor i " + i);
-			E.push(arrayInfix[i]);
-			System.out.println("Valor E " + E.peek()); 
-		}
-
-		try {
-			// Algoritmo Infijo a Postfijo
-			while (!E.isEmpty()) {
-				switch (pref(E.peek())) {
-				case 1:
-					System.out.println("Valor pila 1 " + E.peek());
-					P.push(E.pop());
-					break;
-				case 3:
-				case 4:
-					while (pref(P.peek()) >= pref(E.peek())) { 
-						System.out.println("Valor pila 2 " + P.peek());
-						S.push(P.pop());
-					}
-					System.out.println("Valor pila 3 " + E.peek());
-					P.push(E.pop());
-					break;
-				case 2:
-					while (!P.peek().equals("(")) {
-						System.out.println("Valor pila 4 " + P.peek());
-						S.push(P.pop());
-					}
-					P.pop();
-					E.pop();
-					break;
-				default:
-					System.out.println("Valor pila 5 " + E.peek());
-					S.push(E.pop());
-				}
-			}
-
-			// Eliminacion de 'basura' en la expression
-			// String infix = expr.replace(" ", "");
-			System.out.println("Substring " + S.toString());
-			expr = S.toString().replaceAll("[\\]\\[,]", "");
-
-			// Mostrar resultados:
-			// System.out.println("Expresion Infija: " + infix);
-			System.out.println("Expresion Postfija: " + expr);
-
-		} catch (Exception ex) {
-			System.out.println("Error en la EXPRESSION");
-			System.err.println(ex);
-		}
-
-		return expr;
-	}*/
 
 	private boolean checkSemanticSetColor(AST astTemp, List<String> idList,
 			Integer lineNumber) {
 		// 1- Se valida si existe el ID en la lista de IDs existentes.
-		// Si existe, debe arrojar error y, si no existe, se agrega
+		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
-			if (id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
-				// ID EXISTENTE, se imprime el error y se devuelve false
+			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
+				// ID INEXISTENTE, se imprime el error y se devuelve true
 				System.out.println("Se ha detectado un error en la linea #"
-						+ lineNumber + " el ID "
-						+ astTemp.getChild(1).getValue() + " ya existe.");
+						+ lineNumber + ": el ID "
+						+ astTemp.getChild(1).getValue() + " no existe.");
 				return true;
 			}
 		}
@@ -255,14 +193,13 @@ public class SemanticAnalyzer {
 
 	private boolean checkSemanticCreate(AST astTemp, List<String> idList,
 			Integer lineNumber) {
-
 		// 1- Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe arrojar error y, si no existe, se agrega
 		for (String id : idList) {
 			if (id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
-				// ID EXISTENTE, se imprime el error y se devuelve false
+				// ID EXISTENTE, se imprime el error y se devuelve true
 				System.out.println("Se ha detectado un error en la linea #"
-						+ lineNumber + " el ID "
+						+ lineNumber + ": el ID "
 						+ astTemp.getChild(1).getValue() + " ya existe.");
 				return true;
 			}
@@ -273,6 +210,45 @@ public class SemanticAnalyzer {
 				+ " es correcta.");
 		return false;
 	}
+
+	/*
+	 * private String convertNotation(String infixNotation) { infixNotation =
+	 * infixNotation.replace(" ","");
+	 * System.out.println("imprimo infixNotation " + infixNotation ); String
+	 * expr = depurar(infixNotation);
+	 * System.out.println("imprimo infixNotation 2 " + infixNotation ); String[]
+	 * arrayInfix = expr.split(" ");
+	 * 
+	 * // Declaración de las pilas Stack<String> E = new Stack<String>(); //
+	 * Pila entrada Stack<String> P = new Stack<String>(); // Pila temporal para
+	 * operadores Stack<String> S = new Stack<String>(); // Pila salida
+	 * 
+	 * // Añadir la array a la Pila de entrada (E) for (int i =
+	 * arrayInfix.length - 1; i >= 0; i--) { System.out.println("Valor i " + i);
+	 * E.push(arrayInfix[i]); System.out.println("Valor E " + E.peek()); }
+	 * 
+	 * try { // Algoritmo Infijo a Postfijo while (!E.isEmpty()) { switch
+	 * (pref(E.peek())) { case 1: System.out.println("Valor pila 1 " +
+	 * E.peek()); P.push(E.pop()); break; case 3: case 4: while (pref(P.peek())
+	 * >= pref(E.peek())) { System.out.println("Valor pila 2 " + P.peek());
+	 * S.push(P.pop()); } System.out.println("Valor pila 3 " + E.peek());
+	 * P.push(E.pop()); break; case 2: while (!P.peek().equals("(")) {
+	 * System.out.println("Valor pila 4 " + P.peek()); S.push(P.pop()); }
+	 * P.pop(); E.pop(); break; default: System.out.println("Valor pila 5 " +
+	 * E.peek()); S.push(E.pop()); } }
+	 * 
+	 * // Eliminacion de 'basura' en la expression // String infix =
+	 * expr.replace(" ", ""); System.out.println("Substring " + S.toString());
+	 * expr = S.toString().replaceAll("[\\]\\[,]", "");
+	 * 
+	 * // Mostrar resultados: // System.out.println("Expresion Infija: " +
+	 * infix); System.out.println("Expresion Postfija: " + expr);
+	 * 
+	 * } catch (Exception ex) { System.out.println("Error en la EXPRESSION");
+	 * System.err.println(ex); }
+	 * 
+	 * return expr; }
+	 */
 
 	private void visitAST(AST ast) {
 		// Metodo que recorre el AST de la EXPRESSION y la rearma en notacion
