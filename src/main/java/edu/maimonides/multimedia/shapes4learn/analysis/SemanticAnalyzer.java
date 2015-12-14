@@ -3,6 +3,7 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import edu.maimonides.multimedia.shapes4learn.model.AST;
 
 /**
@@ -17,6 +18,9 @@ public class SemanticAnalyzer {
 
 	String infixNotation = "";
 	String postfixNotation = "";
+	String result = "";
+	List<AST> listChildren;
+	public static String LEFT_DONE = "LEFT_DONE";
 
 	public SemanticAnalyzer() {
 	}
@@ -28,7 +32,7 @@ public class SemanticAnalyzer {
 		System.out.println("\n-----------------------------------\n");
 		System.out.println("Análisis Semántico:\n");
 
-		List<AST> listChildren = ast.listChildren();
+		listChildren = ast.listChildren();
 		boolean errorSemantico = false;
 		Integer lineNumber = 1;
 
@@ -90,7 +94,7 @@ public class SemanticAnalyzer {
 				return true;
 			}
 		}
-
+ 
 		System.out.println("La semantica de la linea #" + lineNumber
 				+ " es correcta.");
 		return false;
@@ -149,13 +153,20 @@ public class SemanticAnalyzer {
 		visitAST(astTemp.getChild(0));
 
 		// 2- Se pasa de polaca a polaca inversa
-		// postfixNotation = convertNotation(infixNotation);
+		postfixNotation = preToPost(infixNotation);
 
 		// 3- Se revuelve la EXPRESSION
-		// System.out.println("Polaca " + polacaNotation);
-		resolveExpression(postfixNotation.trim());
-
-		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		result = resolveExpression(postfixNotation.trim());
+		
+		// 4 - Se crea AST con resultado
+		AST astResult = new AST();
+		astResult.setValue(result);
+		astResult.setLineNumber(lineNumber);
+		
+		// 5 - Se reemplaza la EXPRESSION por el RESULTADO
+		astTemp.replace(astTemp.getChild(0),astResult);
+		
+		// 6- Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
 			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
@@ -211,67 +222,71 @@ public class SemanticAnalyzer {
 		return false;
 	}
 
-	/*
-	 * private String convertNotation(String infixNotation) { infixNotation =
-	 * infixNotation.replace(" ","");
-	 * System.out.println("imprimo infixNotation " + infixNotation ); String
-	 * expr = depurar(infixNotation);
-	 * System.out.println("imprimo infixNotation 2 " + infixNotation ); String[]
-	 * arrayInfix = expr.split(" ");
-	 * 
-	 * // Declaración de las pilas Stack<String> E = new Stack<String>(); //
-	 * Pila entrada Stack<String> P = new Stack<String>(); // Pila temporal para
-	 * operadores Stack<String> S = new Stack<String>(); // Pila salida
-	 * 
-	 * // Añadir la array a la Pila de entrada (E) for (int i =
-	 * arrayInfix.length - 1; i >= 0; i--) { System.out.println("Valor i " + i);
-	 * E.push(arrayInfix[i]); System.out.println("Valor E " + E.peek()); }
-	 * 
-	 * try { // Algoritmo Infijo a Postfijo while (!E.isEmpty()) { switch
-	 * (pref(E.peek())) { case 1: System.out.println("Valor pila 1 " +
-	 * E.peek()); P.push(E.pop()); break; case 3: case 4: while (pref(P.peek())
-	 * >= pref(E.peek())) { System.out.println("Valor pila 2 " + P.peek());
-	 * S.push(P.pop()); } System.out.println("Valor pila 3 " + E.peek());
-	 * P.push(E.pop()); break; case 2: while (!P.peek().equals("(")) {
-	 * System.out.println("Valor pila 4 " + P.peek()); S.push(P.pop()); }
-	 * P.pop(); E.pop(); break; default: System.out.println("Valor pila 5 " +
-	 * E.peek()); S.push(E.pop()); } }
-	 * 
-	 * // Eliminacion de 'basura' en la expression // String infix =
-	 * expr.replace(" ", ""); System.out.println("Substring " + S.toString());
-	 * expr = S.toString().replaceAll("[\\]\\[,]", "");
-	 * 
-	 * // Mostrar resultados: // System.out.println("Expresion Infija: " +
-	 * infix); System.out.println("Expresion Postfija: " + expr);
-	 * 
-	 * } catch (Exception ex) { System.out.println("Error en la EXPRESSION");
-	 * System.err.println(ex); }
-	 * 
-	 * return expr; }
-	 */
-
 	private void visitAST(AST ast) {
-		// Metodo que recorre el AST de la EXPRESSION y la rearma en notacion
-		// polaca inversa
+		// Recorre el AST de la EXPRESSION y la rearma en notacion polaca
 
 		// Se va rearmando EXPRESSION
 		infixNotation = infixNotation + " " + ast.getValue();
 
-		// Se ontiene una lista de los hijos de la raiz
+		// Se obtiene una lista de los hijos de la raiz
 		List<AST> listChildren = ast.listChildren();
 
 		for (AST tmp : listChildren) {
 			// El hijo tiene hijos y por cada uno se invoca de nuevo el metodo
-			// para
-			// imprimirlos
+			// para imprimirlos
 			visitAST(tmp);
 		}
 	}
 
-	private void resolveExpression(String infixNotation) {
+	public String preToPost(String infixNotation) {
+		// Conversor de polaca a polaca inversa para luego poder resolver la operacion
+		String strPostfix = "";
 
+		Stack<String> operatorStack = new Stack<String>();
+
+		char[] prefixExp = infixNotation.toCharArray();
+		for (int i = 0; i < prefixExp.length; i++) {
+			// Se ignora si es blanco
+			if (prefixExp[i] == ' ') {
+				continue;
+			}
+
+			if (isOperator(prefixExp[i])) {
+				operatorStack.push(String.valueOf(prefixExp[i]));
+			} else {
+				strPostfix = strPostfix + " " + String.valueOf(prefixExp[i]);
+
+				while (!operatorStack.empty()
+						&& operatorStack.peek().equals(LEFT_DONE)) {
+					operatorStack.pop();
+
+					strPostfix = strPostfix + " " + operatorStack.pop();
+				}
+				operatorStack.push(LEFT_DONE);
+			}
+		}
+
+		// Devuelve en polaca inversa
+		return strPostfix;
+
+	}
+
+	private static boolean isOperator(char c) {
+		// Evalua si el char recibido es operador
+		
+		char[] operators = { '+', '-', '/', '*' };
+		boolean isOp = false;
+		for (int i = 0; i < operators.length; i++) {
+			if (c == operators[i]) {
+				isOp = true;
+				break;
+			}
+		}
+		return isOp;
+	}
+
+	private String resolveExpression(String infixNotation) {
 		// Se limpia la expression
-		System.out.println("Polaquita " + infixNotation);
 		String[] post = infixNotation.split(" ");
 
 		// Declaración de las pilas
@@ -294,12 +309,12 @@ public class SemanticAnalyzer {
 		}
 
 		// Mostrar resultados:
-		System.out.println("Expresion: " + infixNotation);
-		System.out.println("Resultado: " + P.peek());
+		return P.peek();
 
 	}
 
 	private static int evaluar(String op, String n2, String n1) {
+		
 		int num1 = Integer.parseInt(n1);
 		int num2 = Integer.parseInt(n2);
 		if (op.equals("+"))
