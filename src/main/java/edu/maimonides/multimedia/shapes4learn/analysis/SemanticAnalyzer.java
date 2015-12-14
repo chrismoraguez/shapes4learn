@@ -105,7 +105,7 @@ public class SemanticAnalyzer {
 				return true;
 			}
 		}
- 
+
 		System.out.println("La semantica de la linea #" + lineNumber
 				+ " es correcta.");
 		return false;
@@ -200,24 +200,22 @@ public class SemanticAnalyzer {
 		postfixNotation = preToPost(infixNotation);
 
 		// 3- Se revuelve la EXPRESSION
-<<<<<<< HEAD
+
 		// System.out.println("Polaca " + polacaNotation);
 		resolveExpression(postfixNotation.trim());
 
 		// Se valida si existe el ID en la lista de IDs existentes.
-=======
 		result = resolveExpression(postfixNotation.trim());
-		
+
 		// 4 - Se crea AST con resultado
 		AST astResult = new AST();
 		astResult.setValue(result);
 		astResult.setLineNumber(lineNumber);
-		
+
 		// 5 - Se reemplaza la EXPRESSION por el RESULTADO
-		astTemp.replace(astTemp.getChild(0),astResult);
-		
+		astTemp.replace(astTemp.getChild(0), astResult);
+
 		// 6- Se valida si existe el ID en la lista de IDs existentes.
->>>>>>> 74b9fddadb67dc3d1cf9a68781cf0fb6348c7562
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
 			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
@@ -302,7 +300,8 @@ public class SemanticAnalyzer {
 	}
 
 	public String preToPost(String infixNotation) {
-		// Conversor de polaca a polaca inversa para luego poder resolver la operacion
+		// Conversor de polaca a polaca inversa para luego poder resolver la
+		// operacion
 		String strPostfix = "";
 
 		Stack<String> operatorStack = new Stack<String>();
@@ -336,7 +335,7 @@ public class SemanticAnalyzer {
 
 	private static boolean isOperator(char c) {
 		// Evalua si el char recibido es operador
-		
+
 		char[] operators = { '+', '-', '/', '*' };
 		boolean isOp = false;
 		for (int i = 0; i < operators.length; i++) {
@@ -377,7 +376,7 @@ public class SemanticAnalyzer {
 	}
 
 	private static int evaluar(String op, String n2, String n1) {
-		
+
 		int num1 = Integer.parseInt(n1);
 		int num2 = Integer.parseInt(n2);
 		if (op.equals("+"))
@@ -392,38 +391,4 @@ public class SemanticAnalyzer {
 			return (num1 % num2);
 		return 0;
 	}
-
-	private static String depurar(String s) {
-		// Elimina espacios en blanco
-		s = s.replaceAll("\\s+", "");
-		s = "(" + s + ")";
-		String simbols = "+-*/()";
-		String str = "";
-
-		// Deja espacios entre operadores
-		for (int i = 0; i < s.length(); i++) {
-			if (simbols.contains("" + s.charAt(i))) {
-				str += " " + s.charAt(i) + " ";
-			} else
-				str += s.charAt(i);
-		}
-		return str.replaceAll("\\s+", " ").trim();
-	}
-
-	// Jerarquia de los operadores
-	private static int pref(String op) {
-		int prf = 99;
-		if (op.equals("^"))
-			prf = 5;
-		if (op.equals("*") || op.equals("/"))
-			prf = 4;
-		if (op.equals("+") || op.equals("-"))
-			prf = 3;
-		if (op.equals(")"))
-			prf = 2;
-		if (op.equals("("))
-			prf = 1;
-		return prf;
-	}
-
 }
