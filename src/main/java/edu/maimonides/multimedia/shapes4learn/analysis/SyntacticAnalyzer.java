@@ -172,7 +172,7 @@ public class SyntacticAnalyzer {
 
 		for (int i = 0; i < astIteratorNumber; i++) {
 			// Tantos guiones como # de iteracion en la que estoy
-			System.out.print("-");
+			System.out.print("> ");
 		}
 	}
 
