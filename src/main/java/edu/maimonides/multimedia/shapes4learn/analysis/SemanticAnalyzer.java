@@ -21,7 +21,7 @@ public class SemanticAnalyzer {
 	public SemanticAnalyzer() {
 	}
 
-	public List<String> idList = new ArrayList<String>();
+	public static List<String> idList = new ArrayList<String>();
 
 	public AST analyze(AST ast) throws SemanticException {
 
@@ -32,7 +32,7 @@ public class SemanticAnalyzer {
 		boolean errorSemantico = false;
 		Integer lineNumber = 1;
 
-		System.out.println("\nFunciones: \n");
+		System.out.println("Funciones: \n");
 		for (AST astTemp : listChildren) {
 
 			// System.out.println(astTemp.getValue());
@@ -79,14 +79,25 @@ public class SemanticAnalyzer {
 		// ésto, arroja error. Si no, reemplazar el resultado en el AST.
 		// En este caso, son dos expresiones a verificar.
 
+		// Se valida si la lista está vacía, osea que no se realizó ningún
+		// create. Si está vacía, debe fallar y arrojar error, sino pasa a
+		// recorrer la lista.
+		if (idList.isEmpty()) {
+			// ID INEXISTENTE, se imprime el error y se devuelve true
+			System.out.println("Se ha detectado un error en la linea #"
+					+ lineNumber + ": el ID " + astTemp.getChild(2).getValue()
+					+ " no existe.");
+			return true;
+		}
+
 		// 2- Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
-			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
+			if (!id.equalsIgnoreCase(astTemp.getChild(2).getValue())) {
 				// ID INEXISTENTE, se imprime el error y se devuelve true
 				System.out.println("Se ha detectado un error en la linea #"
 						+ lineNumber + ": el ID "
-						+ astTemp.getChild(1).getValue() + " no existe.");
+						+ astTemp.getChild(2).getValue() + " no existe.");
 				return true;
 			}
 		}
@@ -100,6 +111,17 @@ public class SemanticAnalyzer {
 			Integer lineNumber) {
 		// Chequeo si la expresión es igual o menor a cero, si pasa ésto, arroja
 		// error. Si no, reemplazar el resultado en el AST.
+
+		// Se valida si la lista está vacía, osea que no se realizó ningún
+		// create. Si está vacía, debe fallar y arrojar error, sino pasa a
+		// recorrer la lista.
+		if (idList.isEmpty()) {
+			// ID INEXISTENTE, se imprime el error y se devuelve true
+			System.out.println("Se ha detectado un error en la linea #"
+					+ lineNumber + ": el ID " + astTemp.getChild(1).getValue()
+					+ " no existe.");
+			return true;
+		}
 
 		// 2- Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
@@ -123,6 +145,17 @@ public class SemanticAnalyzer {
 		// Chequeo si la expresión es igual o menor a cero, si pasa ésto, arroja
 		// error. Si no, reemplazar el resultado en el AST.
 
+		// Se valida si la lista está vacía, osea que no se realizó ningún
+		// create. Si está vacía, debe fallar y arrojar error, sino pasa a
+		// recorrer la lista.
+		if (idList.isEmpty()) {
+			// ID INEXISTENTE, se imprime el error y se devuelve true
+			System.out.println("Se ha detectado un error en la linea #"
+					+ lineNumber + ": el ID " + astTemp.getChild(1).getValue()
+					+ " no existe.");
+			return true;
+		}
+
 		// 2- Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
@@ -145,6 +178,17 @@ public class SemanticAnalyzer {
 		// Chequeo si la expresión es igual o menor a cero, si pasa ésto, arroja
 		// error. Si no, reemplazar el resultado en el AST.
 
+		// Se valida si la lista está vacía, osea que no se realizó ningún
+		// create. Si está vacía, debe fallar y arrojar error, sino pasa a
+		// recorrer la lista.
+		if (idList.isEmpty()) {
+			// ID INEXISTENTE, se imprime el error y se devuelve true
+			System.out.println("Se ha detectado un error en la linea #"
+					+ lineNumber + ": el ID " + astTemp.getChild(1).getValue()
+					+ " no existe.");
+			return true;
+		}
+
 		// 1- Se recorre el AST de la EXPRESSION
 		visitAST(astTemp.getChild(0));
 
@@ -155,7 +199,7 @@ public class SemanticAnalyzer {
 		// System.out.println("Polaca " + polacaNotation);
 		resolveExpression(postfixNotation.trim());
 
-		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		// Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
 			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
@@ -174,6 +218,18 @@ public class SemanticAnalyzer {
 
 	private boolean checkSemanticSetColor(AST astTemp, List<String> idList,
 			Integer lineNumber) {
+
+		// Se valida si la lista está vacía, osea que no se realizó ningún
+		// create. Si está vacía, debe fallar y arrojar error, sino pasa a
+		// recorrer la lista.
+		if (idList.isEmpty()) {
+			// ID INEXISTENTE, se imprime el error y se devuelve true
+			System.out.println("Se ha detectado un error en la linea #"
+					+ lineNumber + ": el ID " + astTemp.getChild(1).getValue()
+					+ " no existe.");
+			return true;
+		}
+
 		// 1- Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
