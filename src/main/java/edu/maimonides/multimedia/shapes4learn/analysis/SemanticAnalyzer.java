@@ -3,7 +3,6 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import edu.maimonides.multimedia.shapes4learn.Launcher;
 import edu.maimonides.multimedia.shapes4learn.model.AST;
 
@@ -96,10 +95,10 @@ public class SemanticAnalyzer {
 					+ " no existe.");
 			return true;
 		}
-		
+
 		// 1- Se recorre el AST de la EXPRESSION 1
 		visitAST(astTemp.getChild(0));
-		
+
 		// 2- Se pasa de polaca a polaca inversa
 		postfixNotation = preToPost(infixNotation);
 
@@ -113,11 +112,11 @@ public class SemanticAnalyzer {
 
 		// 5 - Se reemplaza la EXPRESSION 1 por el RESULTADO
 		astTemp.replace(astTemp.getChild(0), astResult);
-		
+
 		// 6 - Se recorre el AST de la EXPRESSION 2
 		infixNotation = "";
 		visitAST(astTemp.getChild(1));
-		
+
 		// 7 - Se pasa de polaca a polaca inversa
 		postfixNotation = preToPost(infixNotation);
 
@@ -131,7 +130,7 @@ public class SemanticAnalyzer {
 
 		// 10 - Se reemplaza la EXPRESSION 2 por el RESULTADO
 		astTemp.replace(astTemp.getChild(1), astResult);
-		
+
 		// 11 - Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
@@ -164,7 +163,7 @@ public class SemanticAnalyzer {
 					+ " no existe.");
 			return true;
 		}
-		
+
 		// 1- Se recorre el AST de la EXPRESSION
 		visitAST(astTemp.getChild(0));
 
@@ -214,9 +213,9 @@ public class SemanticAnalyzer {
 					+ " no existe.");
 			return true;
 		}
-		
+
 		// 1- Se recorre el AST de la EXPRESSION
-				visitAST(astTemp.getChild(0));
+		visitAST(astTemp.getChild(0));
 
 		// 2- Se pasa de polaca a polaca inversa
 		postfixNotation = preToPost(infixNotation);
