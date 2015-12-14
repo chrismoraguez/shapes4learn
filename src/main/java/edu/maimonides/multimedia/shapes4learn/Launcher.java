@@ -33,9 +33,7 @@ import javax.swing.JTextArea;
  */
 public class Launcher {
 
-	/**
-	 * @param args
-	 */
+	public static boolean continuo = true;
 
 	public static void main(String[] args) {
 

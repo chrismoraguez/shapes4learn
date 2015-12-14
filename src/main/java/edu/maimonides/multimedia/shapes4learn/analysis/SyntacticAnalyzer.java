@@ -3,6 +3,8 @@ package edu.maimonides.multimedia.shapes4learn.analysis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
+import edu.maimonides.multimedia.shapes4learn.Launcher;
 import edu.maimonides.multimedia.shapes4learn.model.AST;
 import edu.maimonides.multimedia.shapes4learn.model.Token;
 
@@ -35,20 +37,21 @@ public class SyntacticAnalyzer {
 	public AST astSetRadius = new AST();
 	public AST astSetPosition = new AST();
 	public AST astExpresion2 = new AST();
-	public boolean continuo = true;
 
 	public AST analyze(List<Token> tokens) throws SyntacticException {
 
 		List<Token> sentenceGrammar = new ArrayList<>();
 
-		System.out.println("-----------------------------------");
-		System.out.println("Análisis Sintáctico: \n");
+		if (Launcher.continuo) {
+			System.out.println("-----------------------------------");
+			System.out.println("Análisis Sintáctico: \n");
+		}
 
 		for (Token token : tokens) {
 
 			tipoToken = token.getTipoToken();
 
-			if (continuo) {
+			if (Launcher.continuo) {
 				// Se valida que el token no indique fin de sentencia
 				if (!tipoToken.equals("fin de sentencia")
 						&& (!tokens.isEmpty())) {
@@ -59,7 +62,8 @@ public class SyntacticAnalyzer {
 					// Es fin de sentencia, se cierra la sentencia y se
 					// manda a analizar sintacticamente
 					sentenceGrammar.add(token);
-					continuo = checkSentence(sentenceGrammar, lineNumber);
+					Launcher.continuo = checkSentence(sentenceGrammar,
+							lineNumber);
 					sentenceGrammar = new ArrayList<>();
 					lineNumber++;
 				}
@@ -69,12 +73,12 @@ public class SyntacticAnalyzer {
 		if (!tipoToken.equals("fin de sentencia")) {
 			// Para casos en los cuales no se hayan finalizado la
 			// sentencia correctamente
-			continuo = checkSentence(sentenceGrammar, lineNumber);
+			Launcher.continuo = checkSentence(sentenceGrammar, lineNumber);
 			sentenceGrammar = new ArrayList<>();
 		}
 
 		// Se recorre e imprime el AST
-		if (continuo) {
+		if (Launcher.continuo) {
 			System.out
 					.println("---------------------------Impresión AST-----------------------------");
 			visitAST(nodoPrincipal);

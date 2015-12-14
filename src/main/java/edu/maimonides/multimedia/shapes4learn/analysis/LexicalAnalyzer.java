@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+
+import edu.maimonides.multimedia.shapes4learn.Launcher;
 import edu.maimonides.multimedia.shapes4learn.interpreter.CodeException;
 import edu.maimonides.multimedia.shapes4learn.interpreter.Interpreter;
 import edu.maimonides.multimedia.shapes4learn.model.ShapeAmbient;
@@ -317,10 +320,8 @@ public class LexicalAnalyzer implements Interpreter {
 		}
 
 		if (huboErrores) {
-
-			// Deberia haber una variable global que regule la continuacion o no
-			// del analisis
 			System.out.println("El analizador léxico ha encontrado errores.");
+			Launcher.continuo = false;
 		}
 
 		return tokens;

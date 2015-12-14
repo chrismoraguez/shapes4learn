@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import edu.maimonides.multimedia.shapes4learn.Launcher;
 import edu.maimonides.multimedia.shapes4learn.model.AST;
 
 /**
@@ -37,41 +38,43 @@ public class SemanticAnalyzer {
 		Integer lineNumber = 1;
 
 		System.out.println("Funciones: \n");
-		for (AST astTemp : listChildren) {
+		if (Launcher.continuo) {
+			for (AST astTemp : listChildren) {
 
-			// System.out.println(astTemp.getValue());
-			switch (astTemp.getValue()) {
-			case "create":
-				errorSemantico = checkSemanticCreate(astTemp, idList,
-						lineNumber);
-				break;
-			case "setcolor":
-				errorSemantico = checkSemanticSetColor(astTemp, idList,
-						lineNumber);
-				break;
-			case "setbase":
-				errorSemantico = checkSemanticSetBase(astTemp, idList,
-						lineNumber);
-				break;
-			case "setheight":
-				errorSemantico = checkSemanticSetHeight(astTemp, idList,
-						lineNumber);
-				break;
-			case "setradius":
-				errorSemantico = checkSemanticSetRadius(astTemp, idList,
-						lineNumber);
-				break;
-			case "setposition":
-				errorSemantico = checkSemanticSetPosition(astTemp, idList,
-						lineNumber);
-				break;
+				// System.out.println(astTemp.getValue());
+				switch (astTemp.getValue()) {
+				case "create":
+					errorSemantico = checkSemanticCreate(astTemp, idList,
+							lineNumber);
+					break;
+				case "setcolor":
+					errorSemantico = checkSemanticSetColor(astTemp, idList,
+							lineNumber);
+					break;
+				case "setbase":
+					errorSemantico = checkSemanticSetBase(astTemp, idList,
+							lineNumber);
+					break;
+				case "setheight":
+					errorSemantico = checkSemanticSetHeight(astTemp, idList,
+							lineNumber);
+					break;
+				case "setradius":
+					errorSemantico = checkSemanticSetRadius(astTemp, idList,
+							lineNumber);
+					break;
+				case "setposition":
+					errorSemantico = checkSemanticSetPosition(astTemp, idList,
+							lineNumber);
+					break;
+				}
+				if (errorSemantico) {
+					System.out
+							.println("El analizador semántico ha encontrado errores.");
+					break;
+				}
+				lineNumber++;
 			}
-
-			lineNumber++;
-		}
-
-		if (errorSemantico) {
-
 		}
 
 		return ast;
