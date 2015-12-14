@@ -93,8 +93,43 @@ public class SemanticAnalyzer {
 					+ " no existe.");
 			return true;
 		}
+		
+		// 1- Se recorre el AST de la EXPRESSION 1
+		visitAST(astTemp.getChild(0));
+		
+		// 2- Se pasa de polaca a polaca inversa
+		postfixNotation = preToPost(infixNotation);
 
-		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		// 3- Se revuelve la EXPRESSION 1
+		result = resolveExpression(postfixNotation.trim());
+
+		// 4 - Se crea AST con resultado
+		AST astResult = new AST();
+		astResult.setValue(result);
+		astResult.setLineNumber(lineNumber);
+
+		// 5 - Se reemplaza la EXPRESSION 1 por el RESULTADO
+		astTemp.replace(astTemp.getChild(0), astResult);
+		
+		// 6 - Se recorre el AST de la EXPRESSION 2
+		infixNotation = "";
+		visitAST(astTemp.getChild(1));
+		
+		// 7 - Se pasa de polaca a polaca inversa
+		postfixNotation = preToPost(infixNotation);
+
+		// 8- Se revuelve la EXPRESSION 2
+		result = resolveExpression(postfixNotation.trim());
+
+		// 9 - Se crea AST con resultado
+		astResult = new AST();
+		astResult.setValue(result);
+		astResult.setLineNumber(lineNumber);
+
+		// 10 - Se reemplaza la EXPRESSION 2 por el RESULTADO
+		astTemp.replace(astTemp.getChild(1), astResult);
+		
+		// 11 - Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
 			if (!id.equalsIgnoreCase(astTemp.getChild(2).getValue())) {
@@ -126,8 +161,25 @@ public class SemanticAnalyzer {
 					+ " no existe.");
 			return true;
 		}
+		
+		// 1- Se recorre el AST de la EXPRESSION
+		visitAST(astTemp.getChild(0));
 
-		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		// 2- Se pasa de polaca a polaca inversa
+		postfixNotation = preToPost(infixNotation);
+
+		// 3- Se revuelve la EXPRESSION
+		result = resolveExpression(postfixNotation.trim());
+
+		// 4 - Se crea AST con resultado
+		AST astResult = new AST();
+		astResult.setValue(result);
+		astResult.setLineNumber(lineNumber);
+
+		// 5 - Se reemplaza la EXPRESSION por el RESULTADO
+		astTemp.replace(astTemp.getChild(0), astResult);
+
+		// 6 - Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
 			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
@@ -159,8 +211,25 @@ public class SemanticAnalyzer {
 					+ " no existe.");
 			return true;
 		}
+		
+		// 1- Se recorre el AST de la EXPRESSION
+				visitAST(astTemp.getChild(0));
 
-		// 2- Se valida si existe el ID en la lista de IDs existentes.
+		// 2- Se pasa de polaca a polaca inversa
+		postfixNotation = preToPost(infixNotation);
+
+		// 3- Se revuelve la EXPRESSION
+		result = resolveExpression(postfixNotation.trim());
+
+		// 4 - Se crea AST con resultado
+		AST astResult = new AST();
+		astResult.setValue(result);
+		astResult.setLineNumber(lineNumber);
+
+		// 5 - Se reemplaza la EXPRESSION por el RESULTADO
+		astTemp.replace(astTemp.getChild(0), astResult);
+
+		// 6- Se valida si existe el ID en la lista de IDs existentes.
 		// Si existe, debe procesar y, si no existe, la función es inválida
 		for (String id : idList) {
 			if (!id.equalsIgnoreCase(astTemp.getChild(1).getValue())) {
@@ -200,11 +269,6 @@ public class SemanticAnalyzer {
 		postfixNotation = preToPost(infixNotation);
 
 		// 3- Se revuelve la EXPRESSION
-
-		// System.out.println("Polaca " + polacaNotation);
-		resolveExpression(postfixNotation.trim());
-
-		// Se valida si existe el ID en la lista de IDs existentes.
 		result = resolveExpression(postfixNotation.trim());
 
 		// 4 - Se crea AST con resultado
@@ -300,6 +364,7 @@ public class SemanticAnalyzer {
 	}
 
 	public String preToPost(String infixNotation) {
+		System.out.println("infixNotation " + infixNotation);
 		// Conversor de polaca a polaca inversa para luego poder resolver la
 		// operacion
 		String strPostfix = "";
